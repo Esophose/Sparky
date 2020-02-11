@@ -6,7 +6,7 @@ import discord4j.core.event.domain.guild.GuildCreateEvent
 import discord4j.core.event.domain.guild.GuildDeleteEvent
 import discord4j.core.event.domain.guild.GuildEvent
 
-class GuildJoinLeaveListener : Listener<GuildEvent>(GuildCreateEvent::class.java, GuildDeleteEvent::class.java) {
+class GuildJoinLeaveListener : Listener<GuildEvent>(GuildCreateEvent::class, GuildDeleteEvent::class) {
 
     private var guildSettingsManager: GuildSettingsManager? = null
 
@@ -14,10 +14,9 @@ class GuildJoinLeaveListener : Listener<GuildEvent>(GuildCreateEvent::class.java
         if (this.guildSettingsManager == null)
             this.guildSettingsManager = Sparky.getManager(GuildSettingsManager::class)
 
-        if (event is GuildCreateEvent) {
-            this.executeCreate(event)
-        } else if (event is GuildDeleteEvent) {
-            this.executeDelete(event)
+        when (event) {
+            is GuildCreateEvent -> executeCreate(event)
+            is GuildDeleteEvent -> executeDelete(event)
         }
     }
 

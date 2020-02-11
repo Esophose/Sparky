@@ -15,8 +15,13 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.discord4j:discord4j-core:3.1.0-SNAPSHOT'
+    implementation 'org.slf4j:slf4j-api:1.7.25'
+    implementation 'org.slf4j:slf4j-nop:1.7.25'
+    implementation 'com.zaxxer:HikariCP:3.2.0'
+    implementation 'mysql:mysql-connector-java:8.0.19'
     implementation 'org.xerial:sqlite-jdbc:3.23.1'
+
+    implementation 'com.discord4j:discord4j-core:3.1.0-SNAPSHOT'
     implementation 'com.google.guava:guava:28.1-jre'
     implementation 'org.apache.commons:commons-lang3:3.0'
     implementation 'io.github.cdimascio:java-dotenv:5.1.3'

@@ -34,7 +34,7 @@ class SudoCommand : DiscordCommand() {
 
         val commandPrefix = Sparky.getManager(GuildSettingsManager::class).getGuildSettings(message.guildId).commandPrefix
         member.avatar.flatMap { avatar -> WebhookUtils.createAndExecuteWebhook(message.channel, member.displayName, avatar) { spec -> spec.setContent(command) } }.thenEmpty(Mono.fromRunnable {
-            if (command.startsWith(commandPrefix!!))
+            if (command.startsWith(commandPrefix))
                 commandManager.executeCommand(message.guild, message.channel, message.channelId, message.messageId, member, command, commandPrefix)
         }).subscribe()
     }

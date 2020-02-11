@@ -10,12 +10,14 @@ class _1_Create_Table_SecurityOptions : DataMigration(1) {
 
     @Throws(SQLException::class)
     override fun migrate(connector: DatabaseConnector, connection: Connection) {
-        val query = "CREATE TABLE security_options (" +
-                    "    guild_id       INTEGER NOT NULL PRIMARY KEY," +
-                    "    member_join    INTEGER NOT NULL," +
-                    "    message_create INTEGER NOT NULL" +
-                    ")"
-        connection.createStatement().use { statement -> statement.executeUpdate(query) }
+        val query = """
+                    CREATE TABLE security_options (
+                        guild_id       INTEGER NOT NULL PRIMARY KEY,
+                        member_join    INTEGER NOT NULL,
+                        message_create INTEGER NOT NULL
+                    )
+                    """.trimMargin()
+        connection.createStatement().use { it.executeUpdate(query) }
     }
 
 }

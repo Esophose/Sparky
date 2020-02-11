@@ -51,7 +51,7 @@ class InfoCommand : DiscordCommand() {
                                 spec.setDescription(info)
                                 spec.setThumbnail(self.avatarUrl)
                                 spec.setFooter("Bot Creator: ${owner.username}#${owner.discriminator}", owner.avatarUrl)
-                                spec.setColor(guildSettings.embedColor!!)
+                                spec.setColor(guildSettings.embedColor)
                                 spec.setUrl("https://discordapp.com/api/oauth2/authorize?client_id=323964742538625025&permissions=2113793271&scope=bot")
                             }
                         }

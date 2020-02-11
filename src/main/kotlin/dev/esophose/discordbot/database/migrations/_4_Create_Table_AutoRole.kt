@@ -10,11 +10,13 @@ class _4_Create_Table_AutoRole : DataMigration(4) {
 
     @Throws(SQLException::class)
     override fun migrate(connector: DatabaseConnector, connection: Connection) {
-        val query = "CREATE TABLE auto_role (" +
-                    "    guild_id INTEGER NOT NULL," +
-                    "    role_id  INTEGER NOT NULL" +
-                    ")"
-        connection.createStatement().use { statement -> statement.executeUpdate(query) }
+        val query = """
+                    CREATE TABLE auto_role (
+                        guild_id INTEGER NOT NULL,
+                        role_id  INTEGER NOT NULL
+                    )
+                    """.trimIndent()
+        connection.createStatement().use { it.executeUpdate(query) }
     }
 
 }

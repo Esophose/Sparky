@@ -26,14 +26,14 @@ class PurgeCommand : DiscordCommand() {
     override val defaultRequiredMemberPermission: Permission
         get() = Permission.MANAGE_MESSAGES
 
-    fun execute(message: DiscordCommandMessage, amount: Int?) {
+    fun execute(message: DiscordCommandMessage, amount: Int) {
         message.delete().subscribe()
         message.channel
                 .cast(GuildMessageChannel::class.java)
                 .subscribe { channel ->
                     channel.bulkDelete(
                             channel.getMessagesBefore(channel.lastMessageId.orElse(message.messageId))
-                                    .take(amount!!.toLong())
+                                    .take(amount.toLong())
                                     .map { it.id })
                                     .subscribe()
                 }

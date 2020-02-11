@@ -81,7 +81,6 @@ class CommandManager : Manager() {
     }
 
     fun getArgumentHandler(handledParameterType: Class<*>): DiscordCommandArgumentHandler<*>? {
-        println(handledParameterType.simpleName)
         return if (handledParameterType.isEnum) this.argumentHandlers[EnumArgumentHandler::class] else this.argumentHandlers.values
                 .stream()
                 .filter { x -> x.handledType == handledParameterType.kotlin }

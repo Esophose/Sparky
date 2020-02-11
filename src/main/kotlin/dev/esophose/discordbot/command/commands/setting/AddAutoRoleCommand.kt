@@ -38,13 +38,13 @@ class AddAutoRoleCommand : DiscordCommand() {
             return
         }
 
-        val guildSettings = guildSettingsManager!!.getGuildSettings(message.guildId)
+        val guildSettings = guildSettingsManager.getGuildSettings(message.guildId)
         if (guildSettings.autoRoleIds.contains(role.id)) {
             commandManager.sendResponse(message.channel, "Auto role already exists", "An auto role for ${role.mention} already exists.").subscribe()
             return
         }
 
-        message.guild.flatMap { guild -> guild.getMemberById(Sparky.self!!.id) }
+        message.guild.flatMap { guild -> guild.getMemberById(Sparky.self.id) }
                 .flatMap { it.highestRole }
                 .subscribe { highestRole ->
                     highestRole.position

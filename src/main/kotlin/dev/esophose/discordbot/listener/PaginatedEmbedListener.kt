@@ -4,7 +4,7 @@ import dev.esophose.discordbot.Sparky
 import dev.esophose.discordbot.manager.PaginatedEmbedManager
 import discord4j.core.event.domain.message.ReactionAddEvent
 
-class PaginatedEmbedListener : Listener<ReactionAddEvent>(ReactionAddEvent::class.java) {
+class PaginatedEmbedListener : Listener<ReactionAddEvent>(ReactionAddEvent::class) {
 
     private var paginatedEmbedManager: PaginatedEmbedManager? = null
 

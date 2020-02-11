@@ -8,7 +8,7 @@ import discord4j.core.event.domain.guild.MemberJoinEvent
 import reactor.core.publisher.Flux
 import java.util.*
 
-class MemberJoinSecurityListener : Listener<MemberJoinEvent>(MemberJoinEvent::class.java) {
+class MemberJoinSecurityListener : Listener<MemberJoinEvent>(MemberJoinEvent::class) {
 
     private val auditedEvents: MutableMap<Guild, MutableList<AuditedEvent>> = Collections.synchronizedMap(HashMap())
     private val dangerModes: MutableMap<Guild, Long> = Collections.synchronizedMap(HashMap())

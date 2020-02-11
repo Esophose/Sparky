@@ -15,7 +15,8 @@ class DataMigrationManager : Manager() {
             _1_Create_Table_SecurityOptions(),
             _2_Create_Table_CommandPrefix(),
             _3_Create_Table_EmbedColor(),
-            _4_Create_Table_AutoRole()
+            _4_Create_Table_AutoRole(),
+            _5_Create_Table_MessageAudit()
     )
 
     override fun enable() {

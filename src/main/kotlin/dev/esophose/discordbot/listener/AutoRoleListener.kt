@@ -7,7 +7,7 @@ import discord4j.core.event.domain.guild.MemberJoinEvent
 import discord4j.core.event.domain.role.RoleDeleteEvent
 import reactor.core.publisher.Mono
 
-class AutoRoleListener : Listener<Event>(MemberJoinEvent::class.java, RoleDeleteEvent::class.java) {
+class AutoRoleListener : Listener<Event>(MemberJoinEvent::class, RoleDeleteEvent::class) {
 
     private var guildSettingsManager: GuildSettingsManager? = null
 
@@ -15,10 +15,9 @@ class AutoRoleListener : Listener<Event>(MemberJoinEvent::class.java, RoleDelete
         if (this.guildSettingsManager == null)
             this.guildSettingsManager = Sparky.getManager(GuildSettingsManager::class)
 
-        if (event is MemberJoinEvent) {
-            this.executeMemberJoin(event)
-        } else if (event is RoleDeleteEvent) {
-            this.executeRoleDelete(event)
+        when (event) {
+            is MemberJoinEvent -> executeMemberJoin(event)
+            is RoleDeleteEvent -> executeRoleDelete(event)
         }
     }
 

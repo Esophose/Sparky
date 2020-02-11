@@ -10,11 +10,13 @@ class _3_Create_Table_EmbedColor : DataMigration(3) {
 
     @Throws(SQLException::class)
     override fun migrate(connector: DatabaseConnector, connection: Connection) {
-        val query = "CREATE TABLE embed_color (" +
-                    "    guild_id INTEGER NOT NULL PRIMARY KEY," +
-                    "    color    TEXT NOT NULL" +
-                    ")"
-        connection.createStatement().use { statement -> statement.executeUpdate(query) }
+        val query = """
+                    CREATE TABLE embed_color (
+                        guild_id INTEGER NOT NULL PRIMARY KEY,
+                        color    TEXT NOT NULL
+                    )
+                    """.trimIndent()
+        connection.createStatement().use { it.executeUpdate(query) }
     }
 
 }

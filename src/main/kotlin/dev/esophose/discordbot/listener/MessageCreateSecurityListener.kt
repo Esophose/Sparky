@@ -8,7 +8,7 @@ import reactor.core.publisher.Mono
 import java.time.Duration
 import java.util.*
 
-class MessageCreateSecurityListener : Listener<MessageCreateEvent>(MessageCreateEvent::class.java) {
+class MessageCreateSecurityListener : Listener<MessageCreateEvent>(MessageCreateEvent::class) {
 
     private val auditedEvents: MutableMap<TextChannel, MutableList<AuditedEvent>> = Collections.synchronizedMap(HashMap())
     private val dangerModes: MutableSet<TextChannel> = Collections.synchronizedSet(HashSet())

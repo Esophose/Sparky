@@ -54,7 +54,7 @@ class SettingsCommand : DiscordCommand() {
 
             val info = "These are the current bot settings for this guild:\n\n" +
                     "Command prefix: `" + guildSettings.commandPrefix + "`\n\n" +
-                    "Embed color: `" + BotUtils.toHexString(guildSettings.embedColor!!) + "`\n\n" +
+                    "Embed color: `" + BotUtils.toHexString(guildSettings.embedColor) + "`\n\n" +
                     "Member join security: `" + (if (guildSettings.isMemberJoinSecurityEnabled) "enabled" else "disabled") + "`\n\n" +
                     "Message creation security: `" + (if (guildSettings.isMessageCreateSecurityEnabled) "enabled" else "disabled") + "`\n\n" +
                     autoRolesString + "\n\n" +
