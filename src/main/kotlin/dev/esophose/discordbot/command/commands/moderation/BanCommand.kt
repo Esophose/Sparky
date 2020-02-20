@@ -30,6 +30,11 @@ class BanCommand : DiscordCommand() {
     fun execute(message: DiscordCommandMessage, member: Member, reason: Optional<String>) {
         val commandManager = Sparky.getManager(CommandManager::class)
 
+        if (member.id == Sparky.self.id) {
+            commandManager.sendResponse(message.channel, "Why would you do that?", "Why would you try to ban me? What have I ever done to you?").subscribe()
+            return
+        }
+
         message.guild
                 .flatMap { x -> x.ban(member.id) { spec -> reason.ifPresent { spec.reason = it } } }
                 .doOnError { error -> commandManager.sendResponse(message.channel, "Failed to ban user", "An error occurred trying to ban that user: ${error.message}").subscribe() }

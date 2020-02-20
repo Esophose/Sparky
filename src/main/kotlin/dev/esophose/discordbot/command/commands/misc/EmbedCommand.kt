@@ -20,7 +20,7 @@ class EmbedCommand : DiscordCommand() {
         get() = emptyList()
 
     override val description: String
-        get() = "Makes the bot say a message"
+        get() = "Makes the embed a message"
 
     override val requiredBotPermissions: PermissionSet
         get() = PermissionSet.of(Permission.SEND_MESSAGES)

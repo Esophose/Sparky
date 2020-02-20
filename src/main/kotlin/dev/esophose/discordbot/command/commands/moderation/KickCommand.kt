@@ -30,6 +30,11 @@ class KickCommand : DiscordCommand() {
     fun execute(message: DiscordCommandMessage, member: Member, reason: Optional<String>) {
         val commandManager = Sparky.getManager(CommandManager::class)
 
+        if (member.id == Sparky.self.id) {
+            commandManager.sendResponse(message.channel, "Why would you do that?", "Why would you try to kick me? What have I ever done to you?").subscribe()
+            return
+        }
+
         message.guild
                 .flatMap<Void> { x -> reason.map { s -> x.kick(member.id, s) }.orElseGet { x.kick(member.id) } }
                 .doOnError { error -> commandManager.sendResponse(message.channel, "Failed to kick user", "An error occurred trying to kick that user: " + error.message).subscribe() }

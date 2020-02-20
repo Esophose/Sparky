@@ -32,6 +32,12 @@ class MuteCommand : DiscordCommand() {
 
     fun execute(message: DiscordCommandMessage, member: Member, reason: Optional<String>) {
         val commandManager = Sparky.getManager(CommandManager::class)
+
+        if (member.id == Sparky.self.id) {
+            commandManager.sendResponse(message.channel, "Why would you do that?", "Why would you try to mute me? What have I ever done to you?").subscribe()
+            return
+        }
+
         message.guild.flatMapMany { it.roles }.collectList().subscribe { roles ->
             val optionalMutedRole = roles.stream().filter { x -> StringUtils.equalsIgnoreCase(x.name, "Muted") }.findFirst()
             if (!optionalMutedRole.isPresent) {
