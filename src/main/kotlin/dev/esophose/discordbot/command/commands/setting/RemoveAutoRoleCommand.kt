@@ -33,12 +33,12 @@ class RemoveAutoRoleCommand : DiscordCommand() {
         val guildSettingsManager = Sparky.getManager(GuildSettingsManager::class)
 
         val guildSettings = guildSettingsManager.getGuildSettings(message.guildId)
-        if (guildSettings.autoRoleIds.contains(role.id)) {
+        if (!guildSettings.autoRoleIds.contains(role.id)) {
             commandManager.sendResponse(message.channel, "Auto role does not exist", "An auto role for " + role.mention + " does not exist.").subscribe()
             return
         }
 
-        guildSettingsManager.addAutoRole(message.guildId, role.id)
+        guildSettingsManager.removeAutoRole(message.guildId, role.id)
         commandManager.sendResponse(message.channel, "Removed auto role", "The auto role for " + role.mention + " has been removed.").subscribe()
     }
 
