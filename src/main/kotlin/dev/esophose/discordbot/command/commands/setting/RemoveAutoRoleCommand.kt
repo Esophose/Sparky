@@ -5,11 +5,9 @@ import dev.esophose.discordbot.command.DiscordCommand
 import dev.esophose.discordbot.command.DiscordCommandMessage
 import dev.esophose.discordbot.manager.CommandManager
 import dev.esophose.discordbot.manager.GuildSettingsManager
-import dev.esophose.discordbot.misc.GuildSettings
 import discord4j.core.`object`.entity.Role
 import discord4j.core.`object`.util.Permission
 import discord4j.core.`object`.util.PermissionSet
-import java.util.Collections
 
 class RemoveAutoRoleCommand : DiscordCommand() {
 

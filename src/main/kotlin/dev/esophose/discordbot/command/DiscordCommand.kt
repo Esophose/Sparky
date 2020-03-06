@@ -8,9 +8,6 @@ import discord4j.core.`object`.util.Snowflake
 import java.lang.reflect.Method
 import java.lang.reflect.Parameter
 import java.util.stream.Stream
-import kotlin.reflect.KFunction
-import kotlin.reflect.KParameter
-import kotlin.reflect.full.declaredFunctions
 import kotlin.streams.toList
 
 /**

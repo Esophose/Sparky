@@ -9,7 +9,6 @@ import dev.esophose.discordbot.utils.BotUtils
 import discord4j.core.`object`.util.Permission
 import discord4j.core.`object`.util.PermissionSet
 import java.awt.Color
-import java.util.Collections
 
 class SetEmbedColorCommand : DiscordCommand() {
 

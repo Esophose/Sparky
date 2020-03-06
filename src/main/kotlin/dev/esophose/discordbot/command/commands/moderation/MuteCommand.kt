@@ -4,14 +4,11 @@ import dev.esophose.discordbot.Sparky
 import dev.esophose.discordbot.command.DiscordCommand
 import dev.esophose.discordbot.command.DiscordCommandMessage
 import dev.esophose.discordbot.manager.CommandManager
-import discord4j.core.`object`.entity.Guild
 import discord4j.core.`object`.entity.Member
-import discord4j.core.`object`.entity.Role
 import discord4j.core.`object`.util.Permission
 import discord4j.core.`object`.util.PermissionSet
-import java.util.Collections
-import java.util.Optional
 import org.apache.commons.lang3.StringUtils
+import java.util.*
 
 class MuteCommand : DiscordCommand() {
 

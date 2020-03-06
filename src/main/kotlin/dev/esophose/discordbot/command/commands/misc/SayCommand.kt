@@ -1,12 +1,10 @@
 package dev.esophose.discordbot.command.commands.misc
 
-import dev.esophose.discordbot.Sparky
 import dev.esophose.discordbot.command.DiscordCommand
 import dev.esophose.discordbot.command.DiscordCommandMessage
 import discord4j.core.`object`.entity.channel.GuildMessageChannel
 import discord4j.core.`object`.util.Permission
 import discord4j.core.`object`.util.PermissionSet
-import java.util.Collections
 
 class SayCommand : DiscordCommand() {
 

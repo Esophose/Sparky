@@ -4,16 +4,11 @@ import dev.esophose.discordbot.Sparky
 import dev.esophose.discordbot.command.DiscordCommand
 import dev.esophose.discordbot.misc.GuildSettings
 import dev.esophose.discordbot.utils.BotUtils
-import discord4j.core.`object`.entity.Guild
 import discord4j.core.`object`.util.Permission
 import discord4j.core.`object`.util.Snowflake
 import java.awt.Color
 import java.sql.Connection
-import java.sql.PreparedStatement
-import java.sql.ResultSet
-import java.util.ArrayList
-import java.util.HashMap
-import java.util.Optional
+import java.util.*
 
 class GuildSettingsManager : Manager() {
 

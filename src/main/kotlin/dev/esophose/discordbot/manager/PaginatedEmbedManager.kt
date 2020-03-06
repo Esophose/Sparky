@@ -2,17 +2,12 @@ package dev.esophose.discordbot.manager
 
 import dev.esophose.discordbot.Sparky
 import dev.esophose.discordbot.misc.embed.PaginatedEmbed
-import dev.esophose.discordbot.utils.BotUtils
-import discord4j.core.event.domain.message.ReactionAddEvent
-import discord4j.core.`object`.presence.Activity
-import discord4j.core.`object`.presence.Presence
-import discord4j.core.`object`.reaction.ReactionEmoji
 import discord4j.core.`object`.util.Snowflake
-import java.util.HashMap
-import java.util.concurrent.TimeUnit
-import java.util.function.Consumer
+import discord4j.core.event.domain.message.ReactionAddEvent
 import reactor.core.publisher.Mono
 import reactor.core.scheduler.Schedulers
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 class PaginatedEmbedManager : Manager() {
 

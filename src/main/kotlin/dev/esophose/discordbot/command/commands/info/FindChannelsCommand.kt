@@ -4,18 +4,15 @@ import dev.esophose.discordbot.Sparky
 import dev.esophose.discordbot.command.DiscordCommand
 import dev.esophose.discordbot.command.DiscordCommandMessage
 import dev.esophose.discordbot.manager.CommandManager
-import discord4j.core.`object`.entity.Guild
 import discord4j.core.`object`.entity.channel.Category
 import discord4j.core.`object`.entity.channel.GuildChannel
 import discord4j.core.`object`.entity.channel.VoiceChannel
 import discord4j.core.`object`.util.Permission
 import discord4j.core.`object`.util.PermissionSet
-import java.util.ArrayList
-import java.util.Collections
-import java.util.Comparator
 import org.apache.commons.lang3.StringUtils
 import reactor.core.publisher.Mono
 import reactor.util.function.Tuple2
+import java.util.*
 
 class FindChannelsCommand : DiscordCommand() {
 

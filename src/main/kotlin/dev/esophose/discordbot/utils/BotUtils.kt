@@ -1,11 +1,10 @@
 package dev.esophose.discordbot.utils
 
 import dev.esophose.discordbot.Sparky
-import discord4j.core.`object`.entity.GuildEmoji
 import discord4j.core.`object`.presence.Activity
 import discord4j.core.`object`.presence.Presence
-import discord4j.core.`object`.reaction.ReactionEmoji
 import discord4j.core.`object`.util.Snowflake
+import reactor.core.publisher.Mono
 import java.awt.Color
 import java.io.IOException
 import java.io.InputStream
@@ -14,9 +13,7 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
-import java.util.Optional
 import javax.net.ssl.HttpsURLConnection
-import reactor.core.publisher.Mono
 
 object BotUtils {
 

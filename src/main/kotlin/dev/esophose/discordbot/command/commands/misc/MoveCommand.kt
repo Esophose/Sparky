@@ -6,14 +6,11 @@ import dev.esophose.discordbot.command.DiscordCommandMessage
 import dev.esophose.discordbot.manager.CommandManager
 import dev.esophose.discordbot.utils.BotUtils
 import dev.esophose.discordbot.webhook.WebhookUtils
-import discord4j.core.`object`.Embed
-import discord4j.core.`object`.entity.Member
 import discord4j.core.`object`.entity.channel.GuildChannel
 import discord4j.core.`object`.entity.channel.GuildMessageChannel
 import discord4j.core.`object`.util.Permission
 import discord4j.core.`object`.util.PermissionSet
 import discord4j.core.`object`.util.Snowflake
-import java.util.Collections
 import reactor.core.publisher.Mono
 
 class MoveCommand : DiscordCommand() {

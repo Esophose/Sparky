@@ -4,7 +4,6 @@ import dev.esophose.discordbot.database.DataMigration
 import dev.esophose.discordbot.database.DatabaseConnector
 import java.sql.Connection
 import java.sql.SQLException
-import java.sql.Statement
 
 class _1_Create_Table_SecurityOptions : DataMigration(1) {
 

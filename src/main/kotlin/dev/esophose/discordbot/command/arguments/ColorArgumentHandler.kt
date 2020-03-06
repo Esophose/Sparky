@@ -2,8 +2,8 @@ package dev.esophose.discordbot.command.arguments
 
 import dev.esophose.discordbot.command.DiscordCommandArgumentHandler
 import discord4j.core.`object`.entity.Guild
-import java.awt.Color
 import reactor.core.publisher.Mono
+import java.awt.Color
 import kotlin.reflect.KClass
 
 class ColorArgumentHandler : DiscordCommandArgumentHandler<Color>() {

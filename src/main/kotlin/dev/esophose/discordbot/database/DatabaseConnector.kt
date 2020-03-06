@@ -1,7 +1,6 @@
 package dev.esophose.discordbot.database
 
 import java.sql.Connection
-import java.sql.SQLException
 
 interface DatabaseConnector {
 

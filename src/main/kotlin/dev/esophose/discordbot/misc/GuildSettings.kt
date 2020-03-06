@@ -3,13 +3,11 @@ package dev.esophose.discordbot.misc
 import dev.esophose.discordbot.Sparky
 import dev.esophose.discordbot.command.DiscordCommand
 import dev.esophose.discordbot.manager.CommandManager
-import discord4j.core.`object`.entity.Role
 import discord4j.core.`object`.util.Permission
 import discord4j.core.`object`.util.Snowflake
 import java.awt.Color
 import java.time.Instant
-import java.util.ArrayList
-import java.util.HashMap
+import java.util.*
 
 class GuildSettings(val guildId: Snowflake,
                     val commandPermissions: MutableMap<DiscordCommand, Permission>,

@@ -6,8 +6,8 @@ import discord4j.core.`object`.entity.Member
 import discord4j.core.`object`.entity.Message
 import discord4j.core.`object`.entity.channel.MessageChannel
 import discord4j.core.`object`.util.Snowflake
-import java.util.Optional
 import reactor.core.publisher.Mono
+import java.util.*
 
 class DiscordCommandMessage(val guildId: Snowflake, val channelId: Snowflake, val messageId: Snowflake, val authorId: Snowflake) {
 

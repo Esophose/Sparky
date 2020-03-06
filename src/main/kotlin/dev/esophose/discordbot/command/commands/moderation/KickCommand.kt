@@ -7,8 +7,7 @@ import dev.esophose.discordbot.manager.CommandManager
 import discord4j.core.`object`.entity.Member
 import discord4j.core.`object`.util.Permission
 import discord4j.core.`object`.util.PermissionSet
-import java.util.Collections
-import java.util.Optional
+import java.util.*
 
 class KickCommand : DiscordCommand() {
 

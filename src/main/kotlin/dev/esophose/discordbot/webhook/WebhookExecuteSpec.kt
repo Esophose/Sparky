@@ -7,13 +7,11 @@ import discord4j.core.`object`.entity.channel.TextChannel
 import discord4j.core.spec.EmbedCreateSpec
 import discord4j.core.spec.Spec
 import discord4j.rest.json.request.EmbedRequest
-import java.io.InputStream
-import java.util.ArrayList
-import java.util.Collections
-import java.util.function.Consumer
 import reactor.util.annotation.Nullable
 import reactor.util.function.Tuple2
 import reactor.util.function.Tuples
+import java.io.InputStream
+import java.util.*
 
 /**
  * Spec used to create [Messages][Message] to [TextChannels][TextChannel]. Clients using this spec must

@@ -2,8 +2,8 @@ package dev.esophose.discordbot.webhook
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import discord4j.rest.json.request.EmbedRequest
-import java.util.ArrayList
 import reactor.util.annotation.Nullable
+import java.util.*
 
 class WebhookExecuteRequest(@param:Nullable @field:Nullable private val content: String?,
                             @param:Nullable @field:Nullable private val username: String?,

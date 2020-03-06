@@ -2,8 +2,8 @@ package dev.esophose.discordbot.command.arguments
 
 import dev.esophose.discordbot.command.DiscordCommandArgumentHandler
 import discord4j.core.`object`.entity.Guild
-import java.net.InetAddress
 import reactor.core.publisher.Mono
+import java.net.InetAddress
 import kotlin.reflect.KClass
 
 class InetAddressArgumentHandler : DiscordCommandArgumentHandler<InetAddress>() {

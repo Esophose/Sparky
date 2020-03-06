@@ -3,7 +3,7 @@ package dev.esophose.discordbot.misc.embed
 import discord4j.core.spec.EmbedCreateSpec
 import java.awt.Color
 import java.time.Instant
-import java.util.ArrayList
+import java.util.*
 
 class EmbedStorage {
 

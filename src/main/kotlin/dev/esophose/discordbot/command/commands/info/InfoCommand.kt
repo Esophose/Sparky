@@ -4,12 +4,9 @@ import dev.esophose.discordbot.Sparky
 import dev.esophose.discordbot.command.DiscordCommand
 import dev.esophose.discordbot.command.DiscordCommandMessage
 import dev.esophose.discordbot.manager.GuildSettingsManager
-import dev.esophose.discordbot.misc.GuildSettings
 import dev.esophose.discordbot.utils.BotUtils
-import discord4j.core.`object`.entity.User
 import discord4j.core.`object`.util.Permission
 import discord4j.core.`object`.util.PermissionSet
-import java.util.Collections
 import reactor.core.publisher.Mono
 
 class InfoCommand : DiscordCommand() {

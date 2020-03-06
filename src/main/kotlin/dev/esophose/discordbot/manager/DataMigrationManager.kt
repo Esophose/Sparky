@@ -5,7 +5,6 @@ import dev.esophose.discordbot.database.DataMigration
 import dev.esophose.discordbot.database.SQLiteConnector
 import dev.esophose.discordbot.database.migrations.*
 import java.util.*
-import java.util.stream.Collectors
 import kotlin.streams.toList
 
 class DataMigrationManager : Manager() {

@@ -3,17 +3,11 @@ package dev.esophose.discordbot.command.commands.info
 import dev.esophose.discordbot.Sparky
 import dev.esophose.discordbot.command.DiscordCommand
 import dev.esophose.discordbot.command.DiscordCommandMessage
-import dev.esophose.discordbot.command.DiscordCommandModule
 import dev.esophose.discordbot.manager.CommandManager
 import dev.esophose.discordbot.manager.GuildSettingsManager
 import dev.esophose.discordbot.manager.PaginatedEmbedManager
-import dev.esophose.discordbot.misc.GuildSettings
-import discord4j.core.`object`.entity.Member
-import discord4j.core.`object`.reaction.ReactionEmoji.Unicode
 import discord4j.core.`object`.util.Permission
 import discord4j.core.`object`.util.PermissionSet
-import java.util.Collections
-import java.util.Optional
 
 class HelpCommand : DiscordCommand() {
 

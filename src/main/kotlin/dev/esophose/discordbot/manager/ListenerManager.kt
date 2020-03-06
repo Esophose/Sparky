@@ -3,7 +3,6 @@ package dev.esophose.discordbot.manager
 import dev.esophose.discordbot.Sparky
 import dev.esophose.discordbot.listener.*
 import discord4j.core.event.domain.Event
-import kotlin.reflect.KClass
 
 class ListenerManager : Manager() {
 

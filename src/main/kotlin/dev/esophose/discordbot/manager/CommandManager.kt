@@ -25,7 +25,6 @@ import java.util.regex.Pattern
 import java.util.stream.Collectors
 import java.util.stream.Stream
 import kotlin.reflect.KClass
-import kotlin.reflect.full.isSubclassOf
 
 class CommandManager : Manager() {
 
@@ -272,7 +271,7 @@ class CommandManager : Manager() {
 
     companion object {
         const val DEFAULT_PREFIX = "."
-        val DEFAULT_EMBED_COLOR = Color(0xefca04) // 0xe96b9a
+        val DEFAULT_EMBED_COLOR = Color(0x24bdc1) // 0xefca04, 0xe96b9a
         val COMMAND_PATTERN: Pattern = Pattern.compile("([^\"]\\S*|\".+?\")\\s*")
     }
 

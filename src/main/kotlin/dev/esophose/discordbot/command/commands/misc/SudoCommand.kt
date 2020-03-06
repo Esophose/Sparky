@@ -9,7 +9,6 @@ import dev.esophose.discordbot.webhook.WebhookUtils
 import discord4j.core.`object`.entity.Member
 import discord4j.core.`object`.util.Permission
 import discord4j.core.`object`.util.PermissionSet
-import java.util.Collections
 import reactor.core.publisher.Mono
 
 class SudoCommand : DiscordCommand() {
