@@ -47,7 +47,8 @@ class CommandManager : Manager() {
                 DiscordCommandModule("Info", "info", ReactionEmoji.unicode("\u2757")),
                 DiscordCommandModule("Setting", "setting", ReactionEmoji.unicode("\uD83D\uDEE0")),
                 DiscordCommandModule("Moderation", "moderation", ReactionEmoji.unicode("\uD83D\uDEA8")),
-                DiscordCommandModule("Misc", "misc", ReactionEmoji.unicode("\uD83C\uDF1F"))
+                DiscordCommandModule("Misc", "misc", ReactionEmoji.unicode("\uD83C\uDF1F")),
+                DiscordCommandModule("Owner", "owner", ReactionEmoji.unicode("\uD83C\uDF38"))
         )
 
         Sparky.discord.eventDispatcher.on(MessageCreateEvent::class.java).subscribe { this.handleMessageCreation(it) }
@@ -131,11 +132,6 @@ class CommandManager : Manager() {
             val commandName = pieces[0].toLowerCase()
             val command = this.getCommand(commandName) ?: return
 
-            if (command.numRequiredArguments > pieces.size - 1) {
-                this.sendResponse(channelMono, "Missing arguments", this.getCommandUsage(command, true, commandPrefix)).subscribe()
-                return
-            }
-
             guildMono.subscribe { guild ->
                 Mono.zip(member.basePermissions, guild.getMemberById(Sparky.self.id).flatMap { it.basePermissions })
                         .subscribe { permissions ->
@@ -146,72 +142,80 @@ class CommandManager : Manager() {
                             if (permissions.t2.contains(Permission.ADMINISTRATOR))
                                 missingBotPermissions = PermissionSet.none()
 
-                            if (!hasMemberPermission || !missingBotPermissions.isEmpty()) {
-                                val stringBuilder = StringBuilder()
-                                if (!hasMemberPermission) {
-                                    stringBuilder.append("\n**Missing Member Permission: **").append('\n')
-                                    stringBuilder.append("  - ").append(requiredMemberPermission.name).append('\n')
-                                }
-
-                                if (!missingBotPermissions.isEmpty()) {
-                                    stringBuilder.append("\n**Missing Bot Permissions: **").append('\n')
-                                    for (permission in missingBotPermissions)
-                                        stringBuilder.append("  - ").append(permission.name).append('\n')
-                                }
-
-                                this.sendResponse(channelMono, "Missing permissions", stringBuilder.toString()).subscribe()
-                            } else {
-                                val argumentInfo = command.argumentInfo
-                                val combinedArguments = ArrayList<Tuple3<DiscordCommandArgumentInfo, DiscordCommandArgumentHandler<*>, String>>()
-                                for (i in argumentInfo.indices) {
-                                    val argInfo = argumentInfo[i]
-                                    val input: String = when {
-                                        i + 1 >= pieces.size -> ""
-                                        i == argumentInfo.size - 1 -> pieces.stream().skip((i + 1).toLong()).collect(Collectors.joining(" "))
-                                        else -> pieces[i + 1]
+                            if (!(command.botOwnerOnly && Sparky.botInfo.ownerId == member.id) && (!hasMemberPermission || !missingBotPermissions.isEmpty() || command.botOwnerOnly)) {
+                                if (command.botOwnerOnly) {
+                                    Sparky.botInfo.owner.flatMap { this.sendResponse(channelMono, "Owner only", "This command may only be run by ${it.username}#${it.discriminator}") }.subscribe()
+                                } else {
+                                    val stringBuilder = StringBuilder()
+                                    if (!hasMemberPermission) {
+                                        stringBuilder.append("\n**Missing Member Permission: **").append('\n')
+                                        stringBuilder.append("  - ").append(requiredMemberPermission.name).append('\n')
                                     }
-                                    combinedArguments.add(Tuples.of(argInfo, this.getArgumentHandler(argInfo.type)!!, input))
+
+                                    if (!missingBotPermissions.isEmpty()) {
+                                        stringBuilder.append("\n**Missing Bot Permissions: **").append('\n')
+                                        for (permission in missingBotPermissions)
+                                            stringBuilder.append("  - ").append(permission.name).append('\n')
+                                    }
+
+                                    this.sendResponse(channelMono, "Missing permissions", stringBuilder.toString()).subscribe()
                                 }
-
-                                Flux.fromIterable(combinedArguments)
-                                        .filterWhen { x ->
-                                            if (x.t1.isEnum)
-                                                (x.t2 as EnumArgumentHandler).currentHandledType = x.t1.type.kotlin
-
-                                            x.t2.isInvalid(guild, x.t3, x.t1.isOptional)
+                            } else {
+                                if (command.numRequiredArguments <= pieces.size - 1) {
+                                    val argumentInfo = command.argumentInfo
+                                    val combinedArguments = ArrayList<Tuple3<DiscordCommandArgumentInfo, DiscordCommandArgumentHandler<*>, String>>()
+                                    for (i in argumentInfo.indices) {
+                                        val argInfo = argumentInfo[i]
+                                        val input: String = when {
+                                            i + 1 >= pieces.size -> ""
+                                            i == argumentInfo.size - 1 -> pieces.stream().skip((i + 1).toLong()).collect(Collectors.joining(" "))
+                                            else -> pieces[i + 1]
                                         }
-                                        .collectList()
-                                        .subscribe { invalidArgs ->
-                                            if (invalidArgs.isEmpty()) {
-                                                Flux.fromIterable(combinedArguments)
-                                                        .flatMap { x -> x.t2.handle(guild, x.t3, x.t1.isOptional) }
-                                                        .collectList()
-                                                        .subscribe { parsedArgs ->
-                                                            val commandMessage = DiscordCommandMessage(guild.id, channelId, messageId, member.id)
-                                                            val argumentBuilder = Stream.builder<Any>().add(commandMessage)
-                                                            for (parsedArg in parsedArgs)
-                                                                argumentBuilder.add(parsedArg)
+                                        combinedArguments.add(Tuples.of(argInfo, this.getArgumentHandler(argInfo.type)!!, input))
+                                    }
 
-                                                            try {
-                                                                command.executeMethod.invoke(command, *argumentBuilder.build().toArray())
-                                                            } catch (e: ReflectiveOperationException) {
-                                                                e.printStackTrace()
-                                                            }
-                                                        }
-                                            } else {
-                                                val stringBuilder = StringBuilder()
-                                                invalidArgs.forEach { tuple ->
-                                                    stringBuilder.append("**")
-                                                            .append(tuple.t1.name)
-                                                            .append(" \u2192** ")
-                                                            .append(tuple.t2.getErrorMessage(guild, tuple.t3))
-                                                            .append('\n')
-                                                }
+                                    Flux.fromIterable(combinedArguments)
+                                            .filterWhen { x ->
+                                                if (x.t1.isEnum)
+                                                    (x.t2 as EnumArgumentHandler).currentHandledType = x.t1.type.kotlin
 
-                                                stringBuilder.append('\n').append("**Correct Usage:** ").append(this.getCommandUsage(command, true, commandPrefix))
-                                                this.sendResponse(channelMono, "Invalid argument(s)", stringBuilder.toString()).subscribe()
+                                                x.t2.isInvalid(guild, x.t3, x.t1.isOptional)
                                             }
-                                        }
+                                            .collectList()
+                                            .subscribe { invalidArgs ->
+                                                if (invalidArgs.isEmpty()) {
+                                                    Flux.fromIterable(combinedArguments)
+                                                            .flatMap { x -> x.t2.handle(guild, x.t3, x.t1.isOptional) }
+                                                            .collectList()
+                                                            .subscribe { parsedArgs ->
+                                                                val commandMessage = DiscordCommandMessage(guild.id, channelId, messageId, member.id)
+                                                                val argumentBuilder = Stream.builder<Any>().add(commandMessage)
+                                                                for (parsedArg in parsedArgs)
+                                                                    argumentBuilder.add(parsedArg)
+
+                                                                try {
+                                                                    command.executeMethod.invoke(command, *argumentBuilder.build().toArray())
+                                                                } catch (e: ReflectiveOperationException) {
+                                                                    e.printStackTrace()
+                                                                }
+                                                            }
+                                                } else {
+                                                    val stringBuilder = StringBuilder()
+                                                    invalidArgs.forEach { tuple ->
+                                                        stringBuilder.append("**")
+                                                                .append(tuple.t1.name)
+                                                                .append(" \u2192** ")
+                                                                .append(tuple.t2.getErrorMessage(guild, tuple.t3))
+                                                                .append('\n')
+                                                    }
+
+                                                    stringBuilder.append('\n').append("**Correct Usage:** ").append(this.getCommandUsage(command, true, commandPrefix))
+                                                    this.sendResponse(channelMono, "Invalid argument(s)", stringBuilder.toString()).subscribe()
+                                                }
+                                            }
+                                } else {
+                                    this.sendResponse(channelMono, "Missing arguments", this.getCommandUsage(command, true, commandPrefix)).subscribe()
+                                }
                             }
                         }
             }
@@ -262,10 +266,15 @@ class CommandManager : Manager() {
         return this.commandLookupMap[commandName]
     }
 
-    fun canAccessCommands(guildId: Snowflake, permissions: PermissionSet): Boolean {
-        for (command in this.commands)
+    fun canAccessCommands(guildId: Snowflake, userId: Snowflake, permissions: PermissionSet): Boolean {
+        for (command in this.commands) {
+            if (command.botOwnerOnly && Sparky.botInfo.ownerId == userId)
+                return true
+
             if (permissions.contains(command.getRequiredMemberPermission(guildId)))
                 return true
+        }
+
         return false
     }
 

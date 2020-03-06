@@ -32,7 +32,7 @@ class HelpCommand : DiscordCommand() {
             val commandManager = Sparky.getManager(CommandManager::class)
             val guildSettings = Sparky.getManager(GuildSettingsManager::class).getGuildSettings(message.guildId)
 
-            if (!commandManager.canAccessCommands(message.guildId, permissions)) {
+            if (!commandManager.canAccessCommands(message.guildId, message.authorId, permissions)) {
                 commandManager.sendResponse(message.channel, "No access", "You don't have access to use any commands!").subscribe()
                 return@subscribe
             }
@@ -40,9 +40,12 @@ class HelpCommand : DiscordCommand() {
             paginatedEmbedManager.createPaginatedEmbed(message.authorId, message.channelId) { builder ->
                 val commandModules = commandManager.commandModules
                 for (module in commandModules) {
-                    val commands = module.loadedCommands
-                    if (commands.stream().noneMatch { x -> permissions.contains(x.getRequiredMemberPermission(message.guildId)) })
+                    val commands = mutableListOf(*module.loadedCommands.toTypedArray())
+                    if (module.name != "owner") {
+                        commands.removeIf { !permissions.contains(it.getRequiredMemberPermission(message.guildId)) }
+                    } else if (Sparky.botInfo.ownerId != message.authorId) {
                         continue
+                    }
 
                     builder.addPage { embed ->
                         val emoji = module.icon.asUnicodeEmoji()

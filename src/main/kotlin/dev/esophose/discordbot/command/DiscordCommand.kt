@@ -14,7 +14,7 @@ import kotlin.streams.toList
  * Ensure a `public void` method named `execute` with a first parameter of [DiscordCommandMessage] exists.
  * All following parameters after the first must have a matching DiscordCommandArgumentHandler to be valid.
  */
-abstract class DiscordCommand : Comparable<DiscordCommand> {
+abstract class DiscordCommand(val botOwnerOnly: Boolean = false) : Comparable<DiscordCommand> {
 
     abstract val name: String
 
