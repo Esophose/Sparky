@@ -3,6 +3,7 @@ package dev.esophose.discordbot.utils
 import dev.esophose.discordbot.Sparky
 import discord4j.core.`object`.presence.Activity
 import discord4j.core.`object`.presence.Presence
+import discord4j.core.`object`.reaction.ReactionEmoji
 import discord4j.core.`object`.util.Snowflake
 import reactor.core.publisher.Mono
 import java.awt.Color
@@ -33,8 +34,29 @@ object BotUtils {
             Activity.Type.STREAMING -> "Streaming ${activity.name}"
             Activity.Type.LISTENING -> "Listening to ${activity.name}"
             Activity.Type.WATCHING -> "Watching ${activity.name}"
-            Activity.Type.CUSTOM -> activity.state.orElse(activity.name)
+            Activity.Type.CUSTOM -> {
+                var prefix = ""
+                if (activity.emoji.isPresent) {
+                    val customEmoji = activity.emoji.get().asCustomEmoji()
+                    if (customEmoji.isPresent)
+                        prefix = this.emojiAsFormat(customEmoji.get()) + " "
+
+                    val unicodeEmoji = activity.emoji.get().asUnicodeEmoji()
+                    if (unicodeEmoji.isPresent)
+                        prefix = unicodeEmoji.get().raw + " "
+                }
+
+                prefix + activity.state.orElse(activity.name)
+            }
             else -> "Doing nothing"
+        }
+    }
+
+    private fun emojiAsFormat(emoji: ReactionEmoji.Custom) : String {
+        return if (emoji.isAnimated) {
+            "<a:${emoji.name}:${emoji.id.asString()}>"
+        } else {
+            "<:${emoji.name}:${emoji.id.asString()}>"
         }
     }
 

@@ -45,6 +45,8 @@ class UserInfoCommand : DiscordCommand() {
                                 if (roles.isBlank())
                                     roles = "None"
 
+                                val botTag = if (target.isBot) " [BOT]" else ""
+
                                 val info = "**Snowflake:** " + target.id.asString() + '\n' +
                                         "**Tag:** " + target.mention + '\n' +
                                         "**Discord Join Time:** " + BotUtils.snowflakeAsDateTimeString(target.id) + '\n' +
@@ -55,7 +57,7 @@ class UserInfoCommand : DiscordCommand() {
                                         "**Status:** " + WordUtils.capitalize(tuple.t3.status.value) + '\n' +
                                         "**Presence:** " + BotUtils.presenceAsString(tuple.t3) + '\n' +
                                         "**Roles:** " + roles
-                                commandManager.sendResponse(message.channel, "Info for " + target.username + '#' + target.discriminator, info, target.avatarUrl).subscribe()
+                                commandManager.sendResponse(message.channel, "Info for " + target.username + '#' + target.discriminator + botTag, info, target.avatarUrl).subscribe()
                             }
                 }
     }

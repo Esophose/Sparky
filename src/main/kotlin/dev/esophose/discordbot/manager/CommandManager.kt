@@ -280,7 +280,7 @@ class CommandManager : Manager() {
 
     companion object {
         const val DEFAULT_PREFIX = "."
-        val DEFAULT_EMBED_COLOR = Color(0x24bdc1) // 0xefca04, 0xe96b9a
+        val DEFAULT_EMBED_COLOR = Color(0xe94057) // 0x24bdc1 0xefca04, 0xe96b9a
         val COMMAND_PATTERN: Pattern = Pattern.compile("([^\"]\\S*|\".+?\")\\s*")
     }
 

@@ -38,7 +38,7 @@ class FindChannelsCommand : DiscordCommand() {
                 .flatMapMany { it.channels }
                 .filter { x -> input == "*" || StringUtils.containsIgnoreCase(x.name, input) }
                 .flatMap { channel -> Mono.zip(Mono.just(channel), channel.position) }
-                .sort(Comparator.comparingInt<Tuple2<GuildChannel, Int>> { it.t2 }.reversed())
+                .sort(Comparator.comparingInt<Tuple2<GuildChannel, Int>> { it.t2 })
                 .map { it.t1 }
                 .collectList()
                 .switchIfEmpty(Mono.just(ArrayList()))
