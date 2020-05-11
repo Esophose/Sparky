@@ -7,8 +7,8 @@ import dev.esophose.discordbot.manager.CommandManager
 import dev.esophose.discordbot.utils.BotUtils
 import discord4j.core.`object`.entity.Member
 import discord4j.core.`object`.entity.Role
-import discord4j.core.`object`.util.Permission
-import discord4j.core.`object`.util.PermissionSet
+import discord4j.rest.util.Permission
+import discord4j.rest.util.PermissionSet
 import org.apache.commons.lang3.text.WordUtils
 import reactor.core.publisher.Mono
 import java.time.LocalDateTime

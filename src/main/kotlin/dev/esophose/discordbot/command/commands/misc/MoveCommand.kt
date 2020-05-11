@@ -8,9 +8,9 @@ import dev.esophose.discordbot.utils.BotUtils
 import dev.esophose.discordbot.webhook.WebhookUtils
 import discord4j.core.`object`.entity.channel.GuildChannel
 import discord4j.core.`object`.entity.channel.GuildMessageChannel
-import discord4j.core.`object`.util.Permission
-import discord4j.core.`object`.util.PermissionSet
-import discord4j.core.`object`.util.Snowflake
+import discord4j.rest.util.Permission
+import discord4j.rest.util.PermissionSet
+import discord4j.rest.util.Snowflake
 import reactor.core.publisher.Mono
 
 class MoveCommand : DiscordCommand() {
@@ -42,7 +42,7 @@ class MoveCommand : DiscordCommand() {
             Mono.zip(targetMessage.authorAsMember, targetMessage.authorAsMember.flatMap { it.avatar })
                     .flatMap { specDetails ->
                         WebhookUtils.createAndExecuteWebhook(textChannel, specDetails.t1.displayName, specDetails.t2) { spec ->
-                            targetMessage.content.ifPresent { spec.setContent(it) }
+                            spec.setContent(targetMessage.content)
                             targetMessage.attachments.forEach { file -> spec.addFile(file.filename, BotUtils.getAttachment(file.url)) }
                             if (targetMessage.embeds.isNotEmpty()) {
                                 val embed = targetMessage.embeds[0]

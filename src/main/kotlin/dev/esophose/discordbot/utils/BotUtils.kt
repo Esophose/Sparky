@@ -4,7 +4,7 @@ import dev.esophose.discordbot.Sparky
 import discord4j.core.`object`.presence.Activity
 import discord4j.core.`object`.presence.Presence
 import discord4j.core.`object`.reaction.ReactionEmoji
-import discord4j.core.`object`.util.Snowflake
+import discord4j.rest.util.Snowflake
 import reactor.core.publisher.Mono
 import java.awt.Color
 import java.io.IOException

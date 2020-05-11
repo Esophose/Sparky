@@ -10,8 +10,8 @@ import discord4j.core.`object`.entity.Role
 import discord4j.core.`object`.entity.channel.Category
 import discord4j.core.`object`.entity.channel.TextChannel
 import discord4j.core.`object`.entity.channel.VoiceChannel
-import discord4j.core.`object`.util.Permission
-import discord4j.core.`object`.util.PermissionSet
+import discord4j.rest.util.Permission
+import discord4j.rest.util.PermissionSet
 import org.apache.commons.lang3.StringUtils
 import reactor.core.publisher.Mono
 
@@ -64,7 +64,7 @@ class SetupMuteCommand : DiscordCommand() {
                 is TextChannel -> channel.addRoleOverwrite(roleId, PermissionOverwrite.forRole(roleId, PermissionSet.none(), PermissionSet.of(Permission.SEND_MESSAGES)))
                 is VoiceChannel -> channel.addRoleOverwrite(roleId, PermissionOverwrite.forRole(roleId, PermissionSet.none(), PermissionSet.of(Permission.SPEAK)))
                 is Category -> channel.addRoleOverwrite(roleId, PermissionOverwrite.forRole(roleId, PermissionSet.none(), PermissionSet.of(Permission.SEND_MESSAGES, Permission.SPEAK)))
-                else -> Mono.empty<Void>()
+                else -> Mono.empty()
             }
         }.hasElements().flatMap { commandManager.sendResponse(message.channel, "Set up muted command", "The muted command has been set up.") }.subscribe()
     }

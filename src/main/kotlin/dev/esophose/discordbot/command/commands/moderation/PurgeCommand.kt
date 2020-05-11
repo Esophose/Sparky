@@ -3,8 +3,8 @@ package dev.esophose.discordbot.command.commands.moderation
 import dev.esophose.discordbot.command.DiscordCommand
 import dev.esophose.discordbot.command.DiscordCommandMessage
 import discord4j.core.`object`.entity.channel.GuildMessageChannel
-import discord4j.core.`object`.util.Permission
-import discord4j.core.`object`.util.PermissionSet
+import discord4j.rest.util.Permission
+import discord4j.rest.util.PermissionSet
 
 class PurgeCommand : DiscordCommand() {
 

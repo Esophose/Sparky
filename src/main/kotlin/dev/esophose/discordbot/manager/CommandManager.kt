@@ -2,7 +2,11 @@ package dev.esophose.discordbot.manager
 
 import com.google.common.reflect.ClassPath
 import dev.esophose.discordbot.Sparky
-import dev.esophose.discordbot.command.*
+import dev.esophose.discordbot.command.DiscordCommand
+import dev.esophose.discordbot.command.DiscordCommandArgumentHandler
+import dev.esophose.discordbot.command.DiscordCommandArgumentInfo
+import dev.esophose.discordbot.command.DiscordCommandMessage
+import dev.esophose.discordbot.command.DiscordCommandModule
 import dev.esophose.discordbot.command.arguments.EnumArgumentHandler
 import discord4j.core.`object`.entity.Guild
 import discord4j.core.`object`.entity.Member
@@ -10,17 +14,18 @@ import discord4j.core.`object`.entity.Message
 import discord4j.core.`object`.entity.channel.MessageChannel
 import discord4j.core.`object`.entity.channel.TextChannel
 import discord4j.core.`object`.reaction.ReactionEmoji
-import discord4j.core.`object`.util.Permission
-import discord4j.core.`object`.util.PermissionSet
-import discord4j.core.`object`.util.Snowflake
 import discord4j.core.event.domain.message.MessageCreateEvent
 import discord4j.core.spec.EmbedCreateSpec
+import discord4j.rest.util.Permission
+import discord4j.rest.util.PermissionSet
+import discord4j.rest.util.Snowflake
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.util.function.Tuple3
 import reactor.util.function.Tuples
 import java.awt.Color
-import java.util.*
+import java.util.ArrayList
+import java.util.HashMap
 import java.util.regex.Pattern
 import java.util.stream.Collectors
 import java.util.stream.Stream
@@ -85,7 +90,7 @@ class CommandManager : Manager() {
                 .stream()
                 .filter { x -> x.handledType == handledParameterType.kotlin }
                 .findFirst()
-                .orElseThrow<IllegalStateException> { IllegalStateException() }
+                .orElseThrow { IllegalStateException() }
     }
 
     fun handleMessageCreation(event: MessageCreateEvent) {
@@ -97,15 +102,11 @@ class CommandManager : Manager() {
         if (member.isBot)
             return
 
-        val optionalContent = event.message.content
-        if (optionalContent.isEmpty)
-            return
-
         val optionalGuildId = event.guildId
         if (optionalGuildId.isEmpty)
             return
 
-        val content = optionalContent.get()
+        val content = event.message.content
         val commandPrefix = Sparky.getManager(GuildSettingsManager::class).getGuildSettings(optionalGuildId.get()).commandPrefix
         if (!content.startsWith(commandPrefix)) {
             // Force bot mentions that are at the beginning of a message to trigger the info command

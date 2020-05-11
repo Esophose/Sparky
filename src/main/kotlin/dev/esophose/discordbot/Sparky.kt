@@ -21,19 +21,10 @@ import kotlin.system.exitProcess
 
 object Sparky {
 
-    val discord: GatewayDiscordClient
-        get() = discord_!!
-    val self: User
-        get() = self_!!
-    val botInfo: ApplicationInfo
-        get() = botInfo_!!
-    val connector: DatabaseConnector
-        get() = connector_!!
-
-    private var discord_: GatewayDiscordClient? = null
-    private var self_: User? = null
-    private var botInfo_: ApplicationInfo? = null
-    private var connector_: DatabaseConnector? = null
+    lateinit var discord: GatewayDiscordClient
+    lateinit var self: User
+    lateinit var botInfo: ApplicationInfo
+    lateinit var connector: DatabaseConnector
     private val managers: MutableMap<KClass<out Manager>, Manager> = HashMap()
 
     private fun start() {
@@ -44,16 +35,16 @@ object Sparky {
             exitProcess(1)
         }
 
-        this.discord_ = DiscordClientBuilder.create(token)
+        this.discord = DiscordClientBuilder.create(token)
                 .build()
                 .gateway()
-                .setInitialPresence { Presence.doNotDisturb(Activity.watching("the bot start up...")) }
-                .connect()
+                .setInitialStatus { Presence.doNotDisturb(Activity.watching("the bot start up...")) }
+                .login()
                 .blockOptional()
                 .get()
 
-        this.self_ = this.discord.self.blockOptional().get()
-        this.botInfo_ = this.discord.applicationInfo.blockOptional().get()
+        this.self = this.discord.self.blockOptional().get()
+        this.botInfo = this.discord.applicationInfo.blockOptional().get()
 
         this.discord.eventDispatcher.on(ReadyEvent::class.java).subscribe {
             println("Started as ${this.self.username}#${this.self.discriminator}")
@@ -73,7 +64,7 @@ object Sparky {
 
         // Set up database
         val directory = File(System.getProperty("user.dir"))
-        this.connector_ = SQLiteConnector(directory, "sparky")
+        this.connector = SQLiteConnector(directory, "sparky")
 
         // Pre-load managers
         this.getManager(ListenerManager::class)

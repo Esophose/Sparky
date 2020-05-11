@@ -7,18 +7,11 @@ import java.sql.SQLException
 
 class SQLiteConnector(directory: File, dbName: String) : DatabaseConnector {
 
-    private val connectionString: String
+    private val connectionString = "jdbc:sqlite:" + File(directory, "$dbName.db").absolutePath
     private var connection: Connection? = null
 
     init {
-        this.connectionString = "jdbc:sqlite:" + File(directory, "$dbName.db").absolutePath
-
-        try {
-            Class.forName("org.sqlite.JDBC")
-        } catch (e: ClassNotFoundException) {
-            e.printStackTrace()
-        }
-
+        Class.forName("org.sqlite.JDBC")
     }
 
     override fun closeConnection() {

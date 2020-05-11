@@ -7,8 +7,8 @@ import dev.esophose.discordbot.manager.CommandManager
 import discord4j.core.`object`.entity.channel.Category
 import discord4j.core.`object`.entity.channel.GuildChannel
 import discord4j.core.`object`.entity.channel.VoiceChannel
-import discord4j.core.`object`.util.Permission
-import discord4j.core.`object`.util.PermissionSet
+import discord4j.rest.util.Permission
+import discord4j.rest.util.PermissionSet
 import org.apache.commons.lang3.StringUtils
 import reactor.core.publisher.Mono
 import reactor.util.function.Tuple2

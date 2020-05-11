@@ -7,8 +7,8 @@ import dev.esophose.discordbot.manager.CommandManager
 import dev.esophose.discordbot.manager.GuildSettingsManager
 import dev.esophose.discordbot.webhook.WebhookUtils
 import discord4j.core.`object`.entity.Member
-import discord4j.core.`object`.util.Permission
-import discord4j.core.`object`.util.PermissionSet
+import discord4j.rest.util.Permission
+import discord4j.rest.util.PermissionSet
 import reactor.core.publisher.Mono
 
 class SudoCommand : DiscordCommand() {

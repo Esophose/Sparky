@@ -1,17 +1,17 @@
 package dev.esophose.discordbot.webhook
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import discord4j.rest.json.request.EmbedRequest
+import discord4j.discordjson.json.EmbedData
 import reactor.util.annotation.Nullable
-import java.util.*
+import java.util.ArrayList
 
 class WebhookExecuteRequest(@param:Nullable @field:Nullable private val content: String?,
                             @param:Nullable @field:Nullable private val username: String?,
                             @param:Nullable @field:Nullable @field:JsonProperty("avatar_url") private val avatarUrl: String?,
                             private val tts: Boolean,
-                            @Nullable embed: EmbedRequest?) {
+                            @Nullable embed: EmbedData?) {
     @Nullable
-    private val embeds = ArrayList<EmbedRequest>()
+    private val embeds = ArrayList<EmbedData>()
 
     init {
         if (embed != null)

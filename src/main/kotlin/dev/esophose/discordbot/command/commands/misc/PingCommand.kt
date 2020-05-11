@@ -4,13 +4,13 @@ import dev.esophose.discordbot.Sparky
 import dev.esophose.discordbot.command.DiscordCommand
 import dev.esophose.discordbot.command.DiscordCommandMessage
 import dev.esophose.discordbot.manager.CommandManager
-import discord4j.core.`object`.util.Permission
-import discord4j.core.`object`.util.PermissionSet
+import discord4j.rest.util.Permission
+import discord4j.rest.util.PermissionSet
 import reactor.core.publisher.Mono
 import java.io.IOException
 import java.net.InetAddress
 import java.time.Duration
-import java.util.*
+import java.util.Optional
 import java.util.concurrent.TimeUnit
 
 class PingCommand : DiscordCommand() {

@@ -4,10 +4,10 @@ import dev.esophose.discordbot.Sparky
 import discord4j.core.`object`.entity.Webhook
 import discord4j.core.`object`.entity.channel.MessageChannel
 import discord4j.core.`object`.entity.channel.TextChannel
-import discord4j.core.`object`.util.Image
 import discord4j.rest.request.Router
 import discord4j.rest.route.Routes
 import discord4j.rest.service.RestService
+import discord4j.rest.util.Image
 import reactor.core.publisher.Mono
 import java.util.*
 
@@ -19,7 +19,7 @@ object WebhookUtils {
         try {
             val method_getRouter = RestService::class.java.getDeclaredMethod("getRouter")
             method_getRouter.isAccessible = true
-            router = method_getRouter.invoke(Sparky.discord.coreResources.restClient.webhookService) as Router
+            router = method_getRouter.invoke(Sparky.discord.restClient.webhookService) as Router
         } catch (e: ReflectiveOperationException) {
             e.printStackTrace()
         }

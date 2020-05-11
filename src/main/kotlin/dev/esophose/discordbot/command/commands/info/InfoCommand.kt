@@ -5,8 +5,8 @@ import dev.esophose.discordbot.command.DiscordCommand
 import dev.esophose.discordbot.command.DiscordCommandMessage
 import dev.esophose.discordbot.manager.GuildSettingsManager
 import dev.esophose.discordbot.utils.BotUtils
-import discord4j.core.`object`.util.Permission
-import discord4j.core.`object`.util.PermissionSet
+import discord4j.rest.util.Permission
+import discord4j.rest.util.PermissionSet
 import reactor.core.publisher.Mono
 
 class InfoCommand : DiscordCommand() {
@@ -35,7 +35,7 @@ class InfoCommand : DiscordCommand() {
             val prefix = guildSettings.commandPrefix
 
             val info = "Hi, my name is ${self.username}!\n" +
-                    "I'm a utility bot written in Kotlin with Discord4J 3.1.\n" +
+                    "I'm a utility bot written in Kotlin with Discord4J `3.1.0.M2`.\n" +
                     "Currently, I'm watching over $guildCount guilds with a total of $userCount members.\n" +
                     "My prefix for this guild is `$prefix`\n" +
                     "If you'd like to know more about what I can do, try out my `${prefix}help` command."

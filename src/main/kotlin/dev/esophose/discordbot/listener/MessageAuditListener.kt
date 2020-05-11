@@ -18,7 +18,7 @@ class MessageAuditListener : Listener<MessageEvent>(MessageCreateEvent::class, M
     }
 
     private fun executeCreate(event: MessageCreateEvent) {
-        if (event.guildId.isEmpty || event.member.isEmpty || event.message.content.isEmpty)
+        if (event.guildId.isEmpty || event.member.isEmpty)
             return
 
         Sparky.connector.connect { connection ->
@@ -30,7 +30,7 @@ class MessageAuditListener : Listener<MessageEvent>(MessageCreateEvent::class, M
                     setLong(3, event.member.get().id.asLong())
                     setLong(4, event.message.id.asLong())
                     setString(5, DateTimeFormatter.ISO_INSTANT.format(event.message.timestamp))
-                    setString(6, event.message.content.get())
+                    setString(6, event.message.content)
                     setString(7, "create")
                     executeUpdate()
                 }
@@ -67,7 +67,7 @@ class MessageAuditListener : Listener<MessageEvent>(MessageCreateEvent::class, M
 
         val message = event.message.get()
         message.guild.subscribe { guild ->
-            if (message.author.isEmpty || message.content.isEmpty)
+            if (message.author.isEmpty)
                 return@subscribe
 
             Sparky.connector.connect { connection ->
@@ -79,7 +79,7 @@ class MessageAuditListener : Listener<MessageEvent>(MessageCreateEvent::class, M
                         setLong(3, message.author.get().id.asLong())
                         setLong(4, event.messageId.asLong())
                         setString(5, DateTimeFormatter.ISO_INSTANT.format(Instant.now().truncatedTo(ChronoUnit.MILLIS)))
-                        setString(6, message.content.get())
+                        setString(6, message.content)
                         setString(7, "delete")
                         executeUpdate()
                     }
@@ -102,7 +102,7 @@ class MessageAuditListener : Listener<MessageEvent>(MessageCreateEvent::class, M
                         setLong(3, message.author.get().id.asLong())
                         setLong(4, message.id.asLong())
                         setString(5, DateTimeFormatter.ISO_INSTANT.format(Instant.now().truncatedTo(ChronoUnit.MILLIS)))
-                        setString(6, message.content.get())
+                        setString(6, message.content)
                         setString(7, "delete")
                         addBatch()
                     }

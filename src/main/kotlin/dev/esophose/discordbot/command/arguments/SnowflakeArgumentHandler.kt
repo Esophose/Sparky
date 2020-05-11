@@ -2,7 +2,7 @@ package dev.esophose.discordbot.command.arguments
 
 import dev.esophose.discordbot.command.DiscordCommandArgumentHandler
 import discord4j.core.`object`.entity.Guild
-import discord4j.core.`object`.util.Snowflake
+import discord4j.rest.util.Snowflake
 import reactor.core.publisher.Mono
 import kotlin.reflect.KClass
 

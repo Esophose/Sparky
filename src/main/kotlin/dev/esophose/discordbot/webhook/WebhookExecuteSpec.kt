@@ -6,7 +6,7 @@ import discord4j.core.`object`.entity.Message
 import discord4j.core.`object`.entity.channel.TextChannel
 import discord4j.core.spec.EmbedCreateSpec
 import discord4j.core.spec.Spec
-import discord4j.rest.json.request.EmbedRequest
+import discord4j.discordjson.json.EmbedData
 import reactor.util.annotation.Nullable
 import reactor.util.function.Tuple2
 import reactor.util.function.Tuples
@@ -28,7 +28,7 @@ class WebhookExecuteSpec : Spec<MultipartWebhookRequest> {
     @Nullable
     private var avatarUrl: String? = null
     private var tts: Boolean = false
-    private var embed: EmbedRequest? = null
+    private var embed: EmbedData? = null
     private var files: MutableList<Tuple2<String, InputStream>>? = null
 
     /**
