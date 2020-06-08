@@ -3,8 +3,13 @@ package dev.esophose.discordbot.manager
 import dev.esophose.discordbot.Sparky
 import dev.esophose.discordbot.database.DataMigration
 import dev.esophose.discordbot.database.SQLiteConnector
-import dev.esophose.discordbot.database.migrations.*
-import java.util.*
+import dev.esophose.discordbot.database.migrations._0_Create_Table_CommandPermissionOverride
+import dev.esophose.discordbot.database.migrations._1_Create_Table_SecurityOptions
+import dev.esophose.discordbot.database.migrations._2_Create_Table_CommandPrefix
+import dev.esophose.discordbot.database.migrations._3_Create_Table_EmbedColor
+import dev.esophose.discordbot.database.migrations._4_Create_Table_AutoRole
+import dev.esophose.discordbot.database.migrations._5_Create_Table_MessageAudit
+import java.util.Comparator
 import kotlin.streams.toList
 
 class DataMigrationManager : Manager() {

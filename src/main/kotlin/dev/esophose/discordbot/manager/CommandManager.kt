@@ -16,6 +16,7 @@ import discord4j.core.`object`.entity.channel.TextChannel
 import discord4j.core.`object`.reaction.ReactionEmoji
 import discord4j.core.event.domain.message.MessageCreateEvent
 import discord4j.core.spec.EmbedCreateSpec
+import discord4j.rest.util.Color
 import discord4j.rest.util.Permission
 import discord4j.rest.util.PermissionSet
 import discord4j.rest.util.Snowflake
@@ -23,7 +24,6 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.util.function.Tuple3
 import reactor.util.function.Tuples
-import java.awt.Color
 import java.util.ArrayList
 import java.util.HashMap
 import java.util.regex.Pattern
@@ -50,6 +50,7 @@ class CommandManager : Manager() {
         this.argumentHandlers = HashMap()
         this.commandModules = listOf(
                 DiscordCommandModule("Info", "info", ReactionEmoji.unicode("\u2757")),
+                DiscordCommandModule("Levelling", "levelling", ReactionEmoji.unicode("\uD83C\uDFC6")),
                 DiscordCommandModule("Setting", "setting", ReactionEmoji.unicode("\uD83D\uDEE0")),
                 DiscordCommandModule("Moderation", "moderation", ReactionEmoji.unicode("\uD83D\uDEA8")),
                 DiscordCommandModule("Misc", "misc", ReactionEmoji.unicode("\uD83C\uDF1F")),
@@ -253,7 +254,9 @@ class CommandManager : Manager() {
     }
 
     fun applyEmbedSpec(guildId: Snowflake, spec: EmbedCreateSpec, title: String?, response: String, thumbnailUrl: String?): EmbedCreateSpec {
-        if (title != null) spec.setTitle(title)
+        if (title != null)
+            spec.setTitle(title)
+
         spec.setColor(Sparky.getManager(GuildSettingsManager::class).getGuildSettings(guildId).embedColor)
         spec.setDescription(response)
 

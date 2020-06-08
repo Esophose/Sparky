@@ -11,7 +11,7 @@ import reactor.util.annotation.Nullable
 import reactor.util.function.Tuple2
 import reactor.util.function.Tuples
 import java.io.InputStream
-import java.util.*
+import java.util.ArrayList
 
 /**
  * Spec used to create [Messages][Message] to [TextChannels][TextChannel]. Clients using this spec must

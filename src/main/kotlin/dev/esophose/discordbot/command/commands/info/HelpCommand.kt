@@ -41,11 +41,11 @@ class HelpCommand : DiscordCommand() {
                 val commandModules = commandManager.commandModules
                 for (module in commandModules) {
                     val commands = mutableListOf(*module.loadedCommands.toTypedArray())
-                    if (module.name != "owner") {
-                        commands.removeIf { !permissions.contains(it.getRequiredMemberPermission(message.guildId)) }
-                    } else if (Sparky.botInfo.ownerId != message.authorId) {
+                    commands.removeIf { !permissions.contains(it.getRequiredMemberPermission(message.guildId)) && !permissions.contains(Permission.ADMINISTRATOR) }
+                    commands.removeIf { it.botOwnerOnly && Sparky.botInfo.ownerId != message.authorId }
+
+                    if (commands.isEmpty())
                         continue
-                    }
 
                     builder.addPage { embed ->
                         val emoji = module.icon.asUnicodeEmoji()

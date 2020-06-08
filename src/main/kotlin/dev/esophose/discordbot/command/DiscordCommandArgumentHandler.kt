@@ -2,7 +2,7 @@ package dev.esophose.discordbot.command
 
 import discord4j.core.`object`.entity.Guild
 import reactor.core.publisher.Mono
-import java.util.*
+import java.util.Optional
 import kotlin.reflect.KClass
 
 abstract class DiscordCommandArgumentHandler<T : Any> {

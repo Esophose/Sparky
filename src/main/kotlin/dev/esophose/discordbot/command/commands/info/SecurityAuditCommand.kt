@@ -10,7 +10,8 @@ import discord4j.rest.util.Permission
 import discord4j.rest.util.PermissionSet
 import reactor.core.publisher.Flux
 import reactor.util.function.Tuple2
-import java.util.*
+import java.util.Comparator
+import java.util.HashMap
 
 class SecurityAuditCommand : DiscordCommand() {
 

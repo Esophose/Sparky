@@ -7,7 +7,7 @@ import discord4j.core.`object`.reaction.ReactionEmoji
 import discord4j.core.spec.EmbedCreateSpec
 import discord4j.rest.util.Snowflake
 import reactor.core.publisher.Mono
-import java.util.*
+import java.util.ArrayList
 
 class PaginatedEmbed(val creatorId: Snowflake) {
 

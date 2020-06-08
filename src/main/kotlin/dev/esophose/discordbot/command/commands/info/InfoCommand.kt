@@ -34,11 +34,11 @@ class InfoCommand : DiscordCommand() {
             val guildSettings = Sparky.getManager(GuildSettingsManager::class).getGuildSettings(message.guildId)
             val prefix = guildSettings.commandPrefix
 
-            val info = "Hi, my name is ${self.username}!\n" +
-                    "I'm a utility bot written in Kotlin with Discord4J `3.1.0.M2`.\n" +
-                    "Currently, I'm watching over $guildCount guilds with a total of $userCount members.\n" +
-                    "My prefix for this guild is `$prefix`\n" +
-                    "If you'd like to know more about what I can do, try out my `${prefix}help` command."
+            val info = """Hi, my name is ${self.username}!
+                          I'm a utility bot written in Kotlin with Discord4J `3.1.0.M2`.
+                          Currently, I'm watching over $guildCount guilds with a total of $userCount members.
+                          My prefix for this guild is `$prefix`
+                          If you'd like to know more about what I can do, try out my `${prefix}help` command.""".trimIndent()
 
             Sparky.botInfo.owner.flatMap { owner ->
                 message.channel

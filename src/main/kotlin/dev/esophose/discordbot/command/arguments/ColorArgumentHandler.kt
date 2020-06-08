@@ -2,8 +2,8 @@ package dev.esophose.discordbot.command.arguments
 
 import dev.esophose.discordbot.command.DiscordCommandArgumentHandler
 import discord4j.core.`object`.entity.Guild
+import discord4j.rest.util.Color
 import reactor.core.publisher.Mono
-import java.awt.Color
 import kotlin.reflect.KClass
 
 class ColorArgumentHandler : DiscordCommandArgumentHandler<Color>() {
@@ -13,7 +13,7 @@ class ColorArgumentHandler : DiscordCommandArgumentHandler<Color>() {
 
     override fun handleInternal(guild: Guild, input: String): Mono<Color> {
         return try {
-            Mono.just(Color.decode(input))
+            Mono.just(Color(java.awt.Color.decode(input).rgb))
         } catch (ex: Exception) {
             Mono.empty()
         }

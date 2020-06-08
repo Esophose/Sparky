@@ -5,9 +5,9 @@ import dev.esophose.discordbot.command.DiscordCommand
 import dev.esophose.discordbot.command.DiscordCommandMessage
 import dev.esophose.discordbot.manager.CommandManager
 import dev.esophose.discordbot.utils.BotUtils
+import discord4j.rest.util.Color
 import discord4j.rest.util.Permission
 import discord4j.rest.util.PermissionSet
-import java.awt.Color
 
 class ColorCommand : DiscordCommand() {
 

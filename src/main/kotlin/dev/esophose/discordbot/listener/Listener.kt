@@ -1,7 +1,7 @@
 package dev.esophose.discordbot.listener
 
 import discord4j.core.event.domain.Event
-import java.util.*
+import java.util.Arrays
 import kotlin.reflect.KClass
 import kotlin.streams.toList
 

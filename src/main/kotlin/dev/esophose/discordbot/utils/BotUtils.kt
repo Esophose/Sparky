@@ -1,15 +1,17 @@
 package dev.esophose.discordbot.utils
 
 import dev.esophose.discordbot.Sparky
+import discord4j.core.`object`.entity.channel.TextChannel
 import discord4j.core.`object`.presence.Activity
 import discord4j.core.`object`.presence.Presence
 import discord4j.core.`object`.reaction.ReactionEmoji
+import discord4j.rest.util.Color
 import discord4j.rest.util.Snowflake
 import reactor.core.publisher.Mono
-import java.awt.Color
 import java.io.IOException
 import java.io.InputStream
 import java.net.URL
+import java.text.DecimalFormat
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -86,6 +88,24 @@ object BotUtils {
 
     fun toHexString(color: Color): String {
         return String.format("#%02X%02X%02X", color.red, color.green, color.blue)
+    }
+
+    fun sendLargeMessage(content: String, channel: TextChannel) {
+        val messages = mutableListOf<String>()
+        var messageChunk = content
+        while (messageChunk.length > 1994) {
+            messages.add(messageChunk.substring(0, 1994))
+            messageChunk = messageChunk.substring(1994)
+        }
+        if (messageChunk.isNotEmpty())
+            messages.add(messageChunk)
+        for (message in messages)
+            channel.createMessage("```$message```").subscribe()
+    }
+
+    fun round(number: Number): String {
+        val decimalFormat = DecimalFormat("0.##")
+        return decimalFormat.format(number)
     }
 
 }

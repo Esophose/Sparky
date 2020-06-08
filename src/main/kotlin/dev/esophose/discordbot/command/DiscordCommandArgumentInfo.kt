@@ -2,7 +2,7 @@ package dev.esophose.discordbot.command
 
 import java.lang.reflect.Parameter
 import java.lang.reflect.ParameterizedType
-import java.util.*
+import java.util.Optional
 
 class DiscordCommandArgumentInfo(private val parameter: Parameter) {
 

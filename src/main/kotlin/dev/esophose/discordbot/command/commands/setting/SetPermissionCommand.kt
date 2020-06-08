@@ -26,9 +26,10 @@ class SetPermissionCommand : DiscordCommand() {
         get() = Permission.ADMINISTRATOR
 
     fun execute(message: DiscordCommandMessage, command: DiscordCommand, permission: Permission) {
-        Sparky.getManager(GuildSettingsManager::class).updateCommandPermission(message.guildId, command, permission)
+        val guildSettingsManager = Sparky.getManager(GuildSettingsManager::class)
+        guildSettingsManager.updateCommandPermission(message.guildId, command, permission)
         Sparky.getManager(CommandManager::class).sendResponse(message.channel, "Set command permission",
-                "The permission for **." + command.name + "** has been changed to **" + permission.name + "**").subscribe()
+                "The permission for **${guildSettingsManager.getGuildSettings(message.guildId).commandPrefix}${command.name}** has been changed to **${permission.name}**").subscribe()
     }
 
 }

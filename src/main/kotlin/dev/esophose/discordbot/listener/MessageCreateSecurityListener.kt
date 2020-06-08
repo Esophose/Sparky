@@ -6,7 +6,10 @@ import discord4j.core.`object`.entity.channel.TextChannel
 import discord4j.core.event.domain.message.MessageCreateEvent
 import reactor.core.publisher.Mono
 import java.time.Duration
-import java.util.*
+import java.util.ArrayList
+import java.util.Collections
+import java.util.HashMap
+import java.util.HashSet
 
 class MessageCreateSecurityListener : Listener<MessageCreateEvent>(MessageCreateEvent::class) {
 
@@ -40,14 +43,14 @@ class MessageCreateSecurityListener : Listener<MessageCreateEvent>(MessageCreate
             if (events.size >= DANGER_THRESHOLD && !this.dangerModes.contains(channel)) {
                 this.dangerModes.add(channel)
                 channel.edit { spec -> spec.setRateLimitPerUser(MESSAGE_RATE_LIMIT) }.subscribe()
-                commandManager.sendResponse(Mono.just(channel), "\u26a0 Rate Limited", "This channel has been rate limited due to a sudden influx of messages.\n" + "This rate limit will automatically expire in 10 minutes.").subscribe()
+                commandManager.sendResponse(Mono.just(channel), "\u26a0 Rate Limited", "This channel has been rate limited due to a sudden influx of messages.\nThis rate limit will automatically expire in 10 minutes.").subscribe()
 
                 // Get guild owner and send a DM
                 guild.owner.flatMap { it.privateChannel }.flatMap { x ->
                     x.createMessage { spec ->
                         spec.setEmbed { embedSpec ->
                             commandManager.applyEmbedSpec(guild.id, embedSpec, "\u26a0 Your guild might be in danger!",
-                                    "A large influx of messages have been posted in " + channel.mention + " in " + guild.name + " within the past 10 seconds.\n" +
+                                    "A large influx of messages have been posted in ${channel.mention} in ${guild.name} within the past 10 seconds.\n" +
                                             "We've temporarily put the channel in slowmode for the next 10 minutes as a precaution.", null)
                         }
                     }
@@ -57,7 +60,7 @@ class MessageCreateSecurityListener : Listener<MessageCreateEvent>(MessageCreate
                 Mono.delay(Duration.ofMillis(DANGER_UPDATE_THRESHOLD.toLong())).subscribe {
                     channel.edit { spec -> spec.setRateLimitPerUser(0) }.subscribe()
                     this.dangerModes.remove(channel)
-                    commandManager.sendResponse(Mono.just(channel), "\u26a0 Rate Limited Removed", "The temporary rate limit has been removed from this channel.\n" + "Please avoid spamming the chat.").subscribe()
+                    commandManager.sendResponse(Mono.just(channel), "\u26a0 Rate Limit Removed", "The temporary rate limit has been removed from this channel.\nPlease avoid spamming the chat.").subscribe()
                 }
             }
         }

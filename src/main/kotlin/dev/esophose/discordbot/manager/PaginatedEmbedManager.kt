@@ -6,7 +6,7 @@ import discord4j.core.event.domain.message.ReactionAddEvent
 import discord4j.rest.util.Snowflake
 import reactor.core.publisher.Mono
 import reactor.core.scheduler.Schedulers
-import java.util.*
+import java.util.HashMap
 import java.util.concurrent.TimeUnit
 
 class PaginatedEmbedManager : Manager() {

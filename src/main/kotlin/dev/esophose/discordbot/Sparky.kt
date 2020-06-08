@@ -2,7 +2,12 @@ package dev.esophose.discordbot
 
 import dev.esophose.discordbot.database.DatabaseConnector
 import dev.esophose.discordbot.database.SQLiteConnector
-import dev.esophose.discordbot.manager.*
+import dev.esophose.discordbot.manager.CommandManager
+import dev.esophose.discordbot.manager.DataMigrationManager
+import dev.esophose.discordbot.manager.GuildSettingsManager
+import dev.esophose.discordbot.manager.ListenerManager
+import dev.esophose.discordbot.manager.Manager
+import dev.esophose.discordbot.manager.PaginatedEmbedManager
 import dev.esophose.discordbot.utils.BotUtils
 import discord4j.core.DiscordClientBuilder
 import discord4j.core.GatewayDiscordClient
@@ -14,7 +19,7 @@ import discord4j.core.event.domain.lifecycle.ReadyEvent
 import io.github.cdimascio.dotenv.Dotenv
 import reactor.core.scheduler.Schedulers
 import java.io.File
-import java.util.*
+import java.util.HashMap
 import java.util.concurrent.TimeUnit
 import kotlin.reflect.KClass
 import kotlin.system.exitProcess

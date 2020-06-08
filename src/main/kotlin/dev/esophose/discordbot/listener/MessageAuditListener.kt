@@ -1,7 +1,11 @@
 package dev.esophose.discordbot.listener
 
 import dev.esophose.discordbot.Sparky
-import discord4j.core.event.domain.message.*
+import discord4j.core.event.domain.message.MessageBulkDeleteEvent
+import discord4j.core.event.domain.message.MessageCreateEvent
+import discord4j.core.event.domain.message.MessageDeleteEvent
+import discord4j.core.event.domain.message.MessageEvent
+import discord4j.core.event.domain.message.MessageUpdateEvent
 import java.time.Instant
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit

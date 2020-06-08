@@ -1,7 +1,7 @@
 package dev.esophose.discordbot.command
 
 import discord4j.core.`object`.reaction.ReactionEmoji
-import java.util.*
+import java.util.ArrayList
 
 class DiscordCommandModule(val name: String, private val modulePackage: String, val icon: ReactionEmoji) {
 

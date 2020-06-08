@@ -9,7 +9,7 @@ import discord4j.rest.route.Routes
 import discord4j.rest.service.RestService
 import discord4j.rest.util.Image
 import reactor.core.publisher.Mono
-import java.util.*
+import java.util.Objects
 
 object WebhookUtils {
 
