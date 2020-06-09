@@ -31,62 +31,65 @@ class LeaderboardCommand : DiscordCommand() {
     fun execute(message: DiscordCommandMessage) {
         val commandManager = Sparky.getManager(CommandManager::class)
 
-        Sparky.connector.connect { connection ->
-            connection.createStatement().use { statement ->
-                val result = statement.executeQuery("SELECT author_id, datetime FROM message_audit WHERE type = 'create' GROUP BY content ORDER BY author_id, datetime")
+        message.guild.subscribe { guild ->
+            Sparky.connector.connect { connection ->
+                connection.prepareStatement("SELECT author_id, datetime FROM message_audit WHERE type = 'create' AND guild_id = ? GROUP BY content ORDER BY author_id, datetime").use { statement ->
+                    statement.setLong(1, guild.id.asLong())
+                    val result = statement.executeQuery()
 
-                val xpAmounts = mutableMapOf<Snowflake, Int>()
-                var lastAuthor: Snowflake? = null
-                var lastDate: Instant = Instant.EPOCH
-                var validMessages = 0
-                while (result.next()) {
-                    val authorId = Snowflake.of(result.getLong("author_id"))
-                    if (authorId != lastAuthor) {
-                        if (lastAuthor != null) {
-                            xpAmounts[lastAuthor] = ExperienceUtils.getXPForUser(authorId, validMessages)
-                            lastDate = Instant.EPOCH
-                            validMessages = 0
+                    val xpAmounts = mutableMapOf<Snowflake, Int>()
+                    var lastAuthor: Snowflake? = null
+                    var lastDate: Instant = Instant.EPOCH
+                    var validMessages = 0
+                    while (result.next()) {
+                        val authorId = Snowflake.of(result.getLong("author_id"))
+                        if (authorId != lastAuthor) {
+                            if (lastAuthor != null) {
+                                xpAmounts[lastAuthor] = ExperienceUtils.getXPForUser(authorId, validMessages)
+                                lastDate = Instant.EPOCH
+                                validMessages = 0
+                            }
+                            lastAuthor = authorId
                         }
-                        lastAuthor = authorId
-                    }
 
-                    val dateString = result.getString("datetime")
-                    val date = Instant.parse(dateString)
-                    if (date.toEpochMilli() - lastDate.toEpochMilli() >= THRESHOLD) {
-                        validMessages++
-                        lastDate = date
-                    }
-                }
-
-                // TODO: This sorting algorithm is terrible
-                val leaderboard = mutableListOf<Snowflake>()
-                while (leaderboard.size < 10 && leaderboard.size < xpAmounts.size) {
-                    var highest = 0
-                    var highestAuthor: Snowflake? = null
-                    for (entry in xpAmounts) {
-                        if (leaderboard.contains(entry.key))
-                            continue
-                        if (entry.value > highest) {
-                            highest = entry.value
-                            highestAuthor = entry.key
+                        val dateString = result.getString("datetime")
+                        val date = Instant.parse(dateString)
+                        if (date.toEpochMilli() - lastDate.toEpochMilli() >= THRESHOLD) {
+                            validMessages++
+                            lastDate = date
                         }
                     }
-                    if (highestAuthor != null)
-                        leaderboard.add(highestAuthor)
-                }
 
-                Flux.fromIterable(leaderboard).flatMapSequential(Sparky.discord::getUserById).collectList().subscribe {
-                    var leaderboardString = StringBuilder()
-                    var placement = 1
-                    for (leader in it) {
-                        if (leaderboardString.isNotEmpty())
-                            leaderboardString.append('\n')
-                        val xp = xpAmounts[leader.id]!!
-                        val level = ExperienceUtils.getCurrentLevel(xp)
-                        leaderboardString.append("**$placement).** ${leader.username}#${leader.discriminator} (${leader.mention}) | Level $level (${xp}xp)")
-                        placement++
+                    // TODO: This sorting algorithm is terrible
+                    val leaderboard = mutableListOf<Snowflake>()
+                    while (leaderboard.size < 10 && leaderboard.size < xpAmounts.size) {
+                        var highest = 0
+                        var highestAuthor: Snowflake? = null
+                        for (entry in xpAmounts) {
+                            if (leaderboard.contains(entry.key))
+                                continue
+                            if (entry.value > highest) {
+                                highest = entry.value
+                                highestAuthor = entry.key
+                            }
+                        }
+                        if (highestAuthor != null)
+                            leaderboard.add(highestAuthor)
                     }
-                    commandManager.sendResponse(message.channel, "Levelling Leaderboard", leaderboardString.toString(), it[0].avatarUrl).subscribe()
+
+                    Flux.fromIterable(leaderboard).flatMapSequential(Sparky.discord::getUserById).collectList().subscribe {
+                        var leaderboardString = StringBuilder()
+                        var placement = 1
+                        for (leader in it) {
+                            if (leaderboardString.isNotEmpty())
+                                leaderboardString.append('\n')
+                            val xp = xpAmounts[leader.id]!!
+                            val level = ExperienceUtils.getCurrentLevel(xp)
+                            leaderboardString.append("**$placement).** ${leader.username}#${leader.discriminator} (${leader.mention}) | Level $level (${xp}xp)")
+                            placement++
+                        }
+                        commandManager.sendResponse(message.channel, "Levelling Leaderboard for ${guild.name}", leaderboardString.toString(), it[0].avatarUrl).subscribe()
+                    }
                 }
             }
         }

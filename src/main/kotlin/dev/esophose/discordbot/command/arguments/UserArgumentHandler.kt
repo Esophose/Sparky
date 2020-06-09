@@ -3,7 +3,6 @@ package dev.esophose.discordbot.command.arguments
 import dev.esophose.discordbot.Sparky
 import dev.esophose.discordbot.command.DiscordCommandArgumentHandler
 import discord4j.core.`object`.entity.Guild
-import discord4j.core.`object`.entity.Member
 import discord4j.core.`object`.entity.User
 import reactor.core.publisher.Mono
 import kotlin.reflect.KClass
