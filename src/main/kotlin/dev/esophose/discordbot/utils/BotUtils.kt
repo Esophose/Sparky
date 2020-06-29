@@ -4,6 +4,7 @@ import dev.esophose.discordbot.Sparky
 import discord4j.core.`object`.entity.channel.TextChannel
 import discord4j.core.`object`.presence.Activity
 import discord4j.core.`object`.presence.Presence
+import discord4j.core.`object`.presence.Status
 import discord4j.core.`object`.reaction.ReactionEmoji
 import discord4j.rest.util.Color
 import discord4j.rest.util.Snowflake
@@ -31,27 +32,29 @@ object BotUtils {
             return "Doing nothing"
 
         val activity = optionalActivity.get()
-        return when (activity.type) {
+        val output = when (activity.type) {
             Activity.Type.PLAYING -> "Playing ${activity.name}"
             Activity.Type.STREAMING -> "Streaming ${activity.name}"
             Activity.Type.LISTENING -> "Listening to ${activity.name}"
             Activity.Type.WATCHING -> "Watching ${activity.name}"
             Activity.Type.CUSTOM -> {
-                var prefix = ""
+                var emoji = ""
                 if (activity.emoji.isPresent) {
                     val customEmoji = activity.emoji.get().asCustomEmoji()
                     if (customEmoji.isPresent)
-                        prefix = this.emojiAsFormat(customEmoji.get()) + " "
+                        emoji = this.emojiAsFormat(customEmoji.get()) + " "
 
                     val unicodeEmoji = activity.emoji.get().asUnicodeEmoji()
                     if (unicodeEmoji.isPresent)
-                        prefix = unicodeEmoji.get().raw + " "
+                        emoji = unicodeEmoji.get().raw + " "
                 }
 
-                prefix + activity.state.orElse(activity.name)
+                emoji + activity.state.orElse(activity.name)
             }
             else -> "Doing nothing"
         }
+
+        return output
     }
 
     private fun emojiAsFormat(emoji: ReactionEmoji.Custom) : String {

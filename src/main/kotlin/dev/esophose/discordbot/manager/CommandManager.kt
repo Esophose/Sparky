@@ -50,7 +50,7 @@ class CommandManager : Manager() {
         this.argumentHandlers = HashMap()
         this.commandModules = listOf(
                 DiscordCommandModule("Info", "info", ReactionEmoji.unicode("\u2757")),
-                DiscordCommandModule("Levelling", "levelling", ReactionEmoji.unicode("\uD83C\uDFC6")),
+                DiscordCommandModule("Leveling", "leveling", ReactionEmoji.unicode("\uD83C\uDFC6")),
                 DiscordCommandModule("Setting", "setting", ReactionEmoji.unicode("\uD83D\uDEE0")),
                 DiscordCommandModule("Moderation", "moderation", ReactionEmoji.unicode("\uD83D\uDEA8")),
                 DiscordCommandModule("Misc", "misc", ReactionEmoji.unicode("\uD83C\uDF1F")),

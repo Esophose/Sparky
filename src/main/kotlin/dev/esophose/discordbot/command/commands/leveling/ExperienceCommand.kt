@@ -1,4 +1,4 @@
-package dev.esophose.discordbot.command.commands.levelling;
+package dev.esophose.discordbot.command.commands.leveling;
 
 import dev.esophose.discordbot.Sparky
 import dev.esophose.discordbot.command.DiscordCommand

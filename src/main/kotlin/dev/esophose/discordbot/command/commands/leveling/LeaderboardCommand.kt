@@ -1,4 +1,4 @@
-package dev.esophose.discordbot.command.commands.levelling;
+package dev.esophose.discordbot.command.commands.leveling;
 
 import dev.esophose.discordbot.Sparky
 import dev.esophose.discordbot.command.DiscordCommand
@@ -20,7 +20,7 @@ class LeaderboardCommand : DiscordCommand() {
         get() = listOf("leaderboard", "levels")
 
     override val description: String
-        get() = "Displays the levelling leaderboard"
+        get() = "Displays the leveling leaderboard"
 
     override val requiredBotPermissions: PermissionSet
         get() = PermissionSet.of(Permission.SEND_MESSAGES)
@@ -78,7 +78,7 @@ class LeaderboardCommand : DiscordCommand() {
                     }
 
                     Flux.fromIterable(leaderboard).flatMapSequential(Sparky.discord::getUserById).collectList().subscribe {
-                        var leaderboardString = StringBuilder()
+                        val leaderboardString = StringBuilder()
                         var placement = 1
                         for (leader in it) {
                             if (leaderboardString.isNotEmpty())
@@ -88,7 +88,7 @@ class LeaderboardCommand : DiscordCommand() {
                             leaderboardString.append("**$placement).** ${leader.username}#${leader.discriminator} (${leader.mention}) | Level $level (${xp}xp)")
                             placement++
                         }
-                        commandManager.sendResponse(message.channel, "Levelling Leaderboard for ${guild.name}", leaderboardString.toString(), it[0].avatarUrl).subscribe()
+                        commandManager.sendResponse(message.channel, "Leveling Leaderboard for ${guild.name}", leaderboardString.toString(), it[0].avatarUrl).subscribe()
                     }
                 }
             }
