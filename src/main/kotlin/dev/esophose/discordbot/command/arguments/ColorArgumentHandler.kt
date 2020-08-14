@@ -13,7 +13,7 @@ class ColorArgumentHandler : DiscordCommandArgumentHandler<Color>() {
 
     override fun handleInternal(guild: Guild, input: String): Mono<Color> {
         return try {
-            Mono.just(Color(java.awt.Color.decode(input).rgb))
+            Mono.just(Color.of(java.awt.Color.decode(input).rgb))
         } catch (ex: Exception) {
             Mono.empty()
         }

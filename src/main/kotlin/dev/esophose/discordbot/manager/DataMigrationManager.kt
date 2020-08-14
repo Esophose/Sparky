@@ -28,7 +28,6 @@ class DataMigrationManager : Manager() {
 
         databaseConnector.connect { connection ->
             var currentMigration = -1
-            var migrationsExist = false
 
             val query: String = if (databaseConnector is SQLiteConnector) {
                 "SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = ?"
@@ -36,6 +35,7 @@ class DataMigrationManager : Manager() {
                 "SHOW TABLES LIKE ?"
             }
 
+            var migrationsExist: Boolean
             connection.prepareStatement(query).use { statement ->
                 statement.setString(1, TABLE_NAME)
                 migrationsExist = statement.executeQuery().next()

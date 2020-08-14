@@ -4,9 +4,9 @@ import dev.esophose.discordbot.Sparky
 import dev.esophose.discordbot.command.DiscordCommand
 import dev.esophose.discordbot.misc.GuildSettings
 import dev.esophose.discordbot.utils.BotUtils
+import discord4j.common.util.Snowflake
 import discord4j.rest.util.Color
 import discord4j.rest.util.Permission
-import discord4j.rest.util.Snowflake
 import java.sql.Connection
 import java.util.ArrayList
 import java.util.HashMap
@@ -74,7 +74,7 @@ class GuildSettingsManager : Manager() {
 
                 val result = statement.executeQuery()
                 if (result.next())
-                    settings.embedColor = Color(java.awt.Color.decode(result.getString(1)).rgb)
+                    settings.embedColor = Color.of(java.awt.Color.decode(result.getString(1)).rgb)
             }
 
             val autoRoles = "SELECT role_id FROM auto_role WHERE guild_id = ?"

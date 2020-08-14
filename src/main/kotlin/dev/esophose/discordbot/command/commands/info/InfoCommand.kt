@@ -35,7 +35,7 @@ class InfoCommand : DiscordCommand() {
             val prefix = guildSettings.commandPrefix
 
             val info = """Hi, my name is ${self.username}!
-                          I'm a utility bot written in Kotlin with Discord4J `3.1.0.M2`.
+                          I'm a utility bot written in Kotlin with Discord4J `3.1.0`.
                           Currently, I'm watching over $guildCount guilds with a total of $userCount members.
                           My prefix for this guild is `$prefix`
                           If you'd like to know more about what I can do, try out my `${prefix}help` command.""".trimIndent()

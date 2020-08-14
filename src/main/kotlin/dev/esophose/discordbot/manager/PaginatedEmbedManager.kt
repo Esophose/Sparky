@@ -2,8 +2,8 @@ package dev.esophose.discordbot.manager
 
 import dev.esophose.discordbot.Sparky
 import dev.esophose.discordbot.misc.embed.PaginatedEmbed
+import discord4j.common.util.Snowflake
 import discord4j.core.event.domain.message.ReactionAddEvent
-import discord4j.rest.util.Snowflake
 import reactor.core.publisher.Mono
 import reactor.core.scheduler.Schedulers
 import java.util.HashMap

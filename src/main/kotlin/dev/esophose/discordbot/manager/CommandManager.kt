@@ -8,6 +8,7 @@ import dev.esophose.discordbot.command.DiscordCommandArgumentInfo
 import dev.esophose.discordbot.command.DiscordCommandMessage
 import dev.esophose.discordbot.command.DiscordCommandModule
 import dev.esophose.discordbot.command.arguments.EnumArgumentHandler
+import discord4j.common.util.Snowflake
 import discord4j.core.`object`.entity.Guild
 import discord4j.core.`object`.entity.Member
 import discord4j.core.`object`.entity.Message
@@ -19,7 +20,6 @@ import discord4j.core.spec.EmbedCreateSpec
 import discord4j.rest.util.Color
 import discord4j.rest.util.Permission
 import discord4j.rest.util.PermissionSet
-import discord4j.rest.util.Snowflake
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.util.function.Tuple3
@@ -284,7 +284,7 @@ class CommandManager : Manager() {
 
     companion object {
         const val DEFAULT_PREFIX = "."
-        val DEFAULT_EMBED_COLOR = Color(0xe94057) // 0x24bdc1 0xefca04, 0xe96b9a
+        val DEFAULT_EMBED_COLOR = Color.of(0xe94057) // 0x24bdc1 0xefca04, 0xe96b9a
         val COMMAND_PATTERN: Pattern = Pattern.compile("([^\"]\\S*|\".+?\")\\s*")
     }
 

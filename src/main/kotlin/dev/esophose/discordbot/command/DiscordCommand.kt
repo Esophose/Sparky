@@ -2,9 +2,9 @@ package dev.esophose.discordbot.command
 
 import dev.esophose.discordbot.Sparky
 import dev.esophose.discordbot.manager.GuildSettingsManager
+import discord4j.common.util.Snowflake
 import discord4j.rest.util.Permission
 import discord4j.rest.util.PermissionSet
-import discord4j.rest.util.Snowflake
 import java.lang.reflect.Method
 import java.lang.reflect.Parameter
 import java.util.stream.Stream

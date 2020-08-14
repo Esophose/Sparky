@@ -1,13 +1,12 @@
 package dev.esophose.discordbot.utils
 
 import dev.esophose.discordbot.Sparky
+import discord4j.common.util.Snowflake
 import discord4j.core.`object`.entity.channel.TextChannel
 import discord4j.core.`object`.presence.Activity
 import discord4j.core.`object`.presence.Presence
-import discord4j.core.`object`.presence.Status
 import discord4j.core.`object`.reaction.ReactionEmoji
 import discord4j.rest.util.Color
-import discord4j.rest.util.Snowflake
 import reactor.core.publisher.Mono
 import java.io.IOException
 import java.io.InputStream

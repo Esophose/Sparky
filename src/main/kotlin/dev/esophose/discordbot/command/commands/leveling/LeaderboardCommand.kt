@@ -5,9 +5,9 @@ import dev.esophose.discordbot.command.DiscordCommand
 import dev.esophose.discordbot.command.DiscordCommandMessage
 import dev.esophose.discordbot.manager.CommandManager
 import dev.esophose.discordbot.utils.ExperienceUtils
+import discord4j.common.util.Snowflake
 import discord4j.rest.util.Permission
 import discord4j.rest.util.PermissionSet
-import discord4j.rest.util.Snowflake
 import reactor.core.publisher.Flux
 import java.time.Instant
 

@@ -1,11 +1,11 @@
 package dev.esophose.discordbot.command
 
 import dev.esophose.discordbot.Sparky
+import discord4j.common.util.Snowflake
 import discord4j.core.`object`.entity.Guild
 import discord4j.core.`object`.entity.Member
 import discord4j.core.`object`.entity.Message
 import discord4j.core.`object`.entity.channel.MessageChannel
-import discord4j.rest.util.Snowflake
 import reactor.core.publisher.Mono
 
 class DiscordCommandMessage(val guildId: Snowflake, val channelId: Snowflake, val messageId: Snowflake, val authorId: Snowflake) {
