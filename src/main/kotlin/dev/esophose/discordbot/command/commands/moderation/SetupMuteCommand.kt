@@ -66,7 +66,7 @@ class SetupMuteCommand : DiscordCommand() {
                 is Category -> channel.addRoleOverwrite(roleId, PermissionOverwrite.forRole(roleId, PermissionSet.none(), PermissionSet.of(Permission.SEND_MESSAGES, Permission.SPEAK)))
                 else -> Mono.empty()
             }
-        }.hasElements().flatMap { commandManager.sendResponse(message.channel, "Set up muted command", "The muted command has been set up.") }.subscribe()
+        }.hasElements().flatMap { commandManager.sendResponse(message.channel, "Set up mute command", "The mute command has been set up.") }.subscribe()
     }
 
 }

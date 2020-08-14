@@ -33,7 +33,7 @@ class LeaderboardCommand : DiscordCommand() {
 
         message.guild.subscribe { guild ->
             Sparky.connector.connect { connection ->
-                connection.prepareStatement("SELECT author_id, datetime FROM message_audit WHERE type = 'create' AND guild_id = ? GROUP BY content ORDER BY author_id, datetime").use { statement ->
+                connection.prepareStatement("SELECT author_id, datetime FROM message_audit WHERE type = 'create' AND guild_id = ? GROUP BY author_id, content ORDER BY author_id, datetime").use { statement ->
                     statement.setLong(1, guild.id.asLong())
                     val result = statement.executeQuery()
 
@@ -43,13 +43,14 @@ class LeaderboardCommand : DiscordCommand() {
                     var validMessages = 0
                     while (result.next()) {
                         val authorId = Snowflake.of(result.getLong("author_id"))
-                        if (authorId != lastAuthor) {
-                            if (lastAuthor != null) {
-                                xpAmounts[lastAuthor] = ExperienceUtils.getXPForUser(authorId, validMessages)
-                                lastDate = Instant.EPOCH
-                                validMessages = 0
-                            }
-                            lastAuthor = authorId
+
+                        if (authorId != lastAuthor && lastAuthor != null) {
+                            if (authorId == message.authorId)
+                                validMessages++
+
+                            xpAmounts[lastAuthor] = ExperienceUtils.getXPForUser(lastAuthor, validMessages)
+                            lastDate = Instant.EPOCH
+                            validMessages = 0
                         }
 
                         val dateString = result.getString("datetime")
@@ -58,7 +59,12 @@ class LeaderboardCommand : DiscordCommand() {
                             validMessages++
                             lastDate = date
                         }
+
+                        lastAuthor = authorId
                     }
+
+                    if (lastAuthor != null)
+                        xpAmounts[lastAuthor] = ExperienceUtils.getXPForUser(lastAuthor, validMessages)
 
                     // TODO: This sorting algorithm is terrible
                     val leaderboard = mutableListOf<Snowflake>()

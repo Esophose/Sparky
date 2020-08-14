@@ -38,7 +38,7 @@ class ExperienceCommand : DiscordCommand() {
                     .orElseGet { message.author }
                     .subscribe { target ->
                         Sparky.connector.connect { connection ->
-                            connection.prepareStatement("SELECT datetime FROM message_audit WHERE type = 'create' AND author_id = ? AND guild_id = ? GROUP BY content ORDER BY datetime").use { statement ->
+                            connection.prepareStatement("SELECT datetime FROM message_audit WHERE type = 'create' AND author_id = ? AND guild_id = ? GROUP BY author_id, content ORDER BY datetime").use { statement ->
                                 statement.setLong(1, target.id.asLong())
                                 statement.setLong(2, guild.id.asLong())
                                 val result = statement.executeQuery()
@@ -61,8 +61,8 @@ class ExperienceCommand : DiscordCommand() {
                                 commandManager.sendResponse(message.channel,
                                         "Stats for ${target.username}#${target.discriminator}",
                                         "Level: $level\n" +
-                                                "XP: $xp/${ExperienceUtils.getXPRequiredForLevel(level + 1)} (${ExperienceUtils.getXPToNextLevel(xp)} remaining)\n" +
-                                                "Messages: $validMessages/$totalMessages (${BotUtils.round((validMessages / totalMessages.toDouble()) * 100)}%)\n",
+                                        "XP: $xp/${ExperienceUtils.getXPRequiredForLevel(level + 1)} (${ExperienceUtils.getXPToNextLevel(xp)} remaining)\n" +
+                                        "Messages: $validMessages/$totalMessages (${BotUtils.round((validMessages / totalMessages.toDouble()) * 100)}%)\n",
                                         target.avatarUrl
                                 ).subscribe()
                             }
