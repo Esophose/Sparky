@@ -33,9 +33,11 @@ abstract class DiscordCommand(val botOwnerOnly: Boolean = false) : Comparable<Di
                 .orElseThrow { IllegalStateException() }
 
     val argumentInfo: List<DiscordCommandArgumentInfo>
-        get() = Stream.of(*this.parameters)
-                .map { DiscordCommandArgumentInfo(it) }
-                .toList()
+        get() {
+            val info = mutableListOf<DiscordCommandArgumentInfo>()
+            this.parameters.forEachIndexed { index, parameter -> info.add(DiscordCommandArgumentInfo(parameter, index)) }
+            return info
+        }
 
     val numParameters: Int
         get() = this.parameters.size - 1
@@ -49,7 +51,7 @@ abstract class DiscordCommand(val botOwnerOnly: Boolean = false) : Comparable<Di
     private val parameters: Array<Parameter>
         get() = Stream.of(*this.executeMethod.parameters)
                 .skip(1)
-                .toArray<Parameter> { arrayOfNulls(it) }
+                .toArray { arrayOfNulls(it) }
 
     fun getRequiredMemberPermission(guildId: Snowflake): Permission {
         return Sparky.getManager(GuildSettingsManager::class)

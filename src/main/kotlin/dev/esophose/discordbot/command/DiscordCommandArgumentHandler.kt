@@ -2,6 +2,8 @@ package dev.esophose.discordbot.command
 
 import discord4j.core.`object`.entity.Guild
 import reactor.core.publisher.Mono
+import reactor.util.function.Tuple2
+import reactor.util.function.Tuples
 import java.util.Optional
 import kotlin.reflect.KClass
 
@@ -13,14 +15,15 @@ abstract class DiscordCommandArgumentHandler<T : Any> {
     abstract val handledType: KClass<T>
 
     @Suppress("UNCHECKED_CAST")
-    fun handle(guild: Guild, input: String, isOptional: Boolean): Mono<Any> {
+    fun handle(guild: Guild, input: String, isOptional: Boolean, position: Int): Mono<Tuple2<Int, Any>> {
         return if (isOptional) {
             this.handleInternal(guild, input)
                     .map { Optional.of(it) }
                     .cast(Any::class.java)
                     .switchIfEmpty(Mono.just(Optional.empty<Any>()))
+                    .map { Tuples.of(position, it) }
         } else {
-            this.handleInternal(guild, input) as Mono<Any>
+            (this.handleInternal(guild, input) as Mono<Any>).map { Tuples.of(position, it) }
         }
     }
 
@@ -43,7 +46,7 @@ abstract class DiscordCommandArgumentHandler<T : Any> {
     abstract fun getErrorMessage(guild: Guild, input: String): String
 
     fun isInvalid(guild: Guild, input: String, isOptional: Boolean): Mono<Boolean> {
-        return if (input.trim { it <= ' ' }.isEmpty()) Mono.just(!isOptional) else this.handle(guild, input, false).hasElement().map { x -> !x }
+        return if (input.trim { it <= ' ' }.isEmpty()) Mono.just(!isOptional) else this.handle(guild, input, false, -1).hasElement().map { x -> !x }
     }
 
 }

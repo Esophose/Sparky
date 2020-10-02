@@ -5,7 +5,6 @@ import dev.esophose.discordbot.command.DiscordCommand
 import dev.esophose.discordbot.command.DiscordCommandMessage
 import dev.esophose.discordbot.manager.CommandManager
 import dev.esophose.discordbot.utils.BotUtils
-import dev.esophose.discordbot.webhook.WebhookUtils
 import discord4j.common.util.Snowflake
 import discord4j.core.`object`.entity.channel.GuildChannel
 import discord4j.core.`object`.entity.channel.GuildMessageChannel
@@ -41,17 +40,22 @@ class MoveCommand : DiscordCommand() {
         message.channel.flatMap { channel -> channel.getMessageById(messageId).doOnError { commandManager.sendResponse(message.channel, "Failed to move message", "The given message snowflake was invalid.").subscribe() } }.subscribe { targetMessage ->
             Mono.zip(targetMessage.authorAsMember, targetMessage.authorAsMember.flatMap { it.avatar })
                     .flatMap { specDetails ->
-                        WebhookUtils.createAndExecuteWebhook(textChannel, specDetails.t1.displayName, specDetails.t2) { spec ->
+                        textChannel.createWebhook { spec ->
+                            spec.setName(specDetails.t1.displayName)
+                            spec.setAvatar(specDetails.t2)
+                        }
+                    }
+                    .flatMap { webhook ->
+                        webhook.execute { spec ->
                             spec.setContent(targetMessage.content)
-                            targetMessage.attachments.forEach { file -> spec.addFile(file.filename, BotUtils.getAttachment(file.url)) }
-                            if (targetMessage.embeds.isNotEmpty()) {
-                                val embed = targetMessage.embeds[0]
-                                spec.setEmbed { embedSpec ->
-                                    embed.author.ifPresent { author -> embedSpec.setAuthor(author.name, author.url, author.iconUrl) }
+                            targetMessage.attachments.forEach { spec.addFile(it.filename, BotUtils.getAttachment(it.url)) }
+                            targetMessage.embeds.forEach { embed ->
+                                spec.addEmbed { embedSpec ->
+                                    embed.author.ifPresent { author -> embedSpec.setAuthor(author.name.get(), author.url.orElse(null), author.iconUrl.orElse(null)) }
                                     embed.color.ifPresent { embedSpec.setColor(it) }
                                     embed.description.ifPresent { embedSpec.setDescription(it) }
                                     embed.fields.forEach { field -> embedSpec.addField(field.name, field.value, field.isInline) }
-                                    embed.footer.ifPresent { footer -> embedSpec.setFooter(footer.text, footer.iconUrl) }
+                                    embed.footer.ifPresent { footer -> embedSpec.setFooter(footer.text, footer.iconUrl.orElse(null)) }
                                     embed.image.map { it.url }.ifPresent { embedSpec.setUrl(it) }
                                     embed.thumbnail.map { it.url }.ifPresent { embedSpec.setThumbnail(it) }
                                     embed.timestamp.ifPresent { embedSpec.setTimestamp(it) }
@@ -59,8 +63,9 @@ class MoveCommand : DiscordCommand() {
                                     embed.url.ifPresent { embedSpec.setUrl(it) }
                                 }
                             }
-                        }
-                    }.doOnSuccess {
+                        }.then(webhook.delete())
+                    }
+                    .doOnSuccess {
                         targetMessage.delete("Moved message").subscribe()
                         commandManager.sendResponse(message.channel, "Message moved", "The message was moved successfully.").subscribe()
                     }.subscribe()

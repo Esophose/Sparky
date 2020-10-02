@@ -35,7 +35,7 @@ class KickCommand : DiscordCommand() {
         }
 
         message.guild
-                .flatMap<Void> { x -> reason.map { s -> x.kick(member.id, s) }.orElseGet { x.kick(member.id) } }
+                .flatMap { x -> reason.map { s -> x.kick(member.id, s) }.orElseGet { x.kick(member.id) } }
                 .doOnError { error -> commandManager.sendResponse(message.channel, "Failed to kick user", "An error occurred trying to kick that user: " + error.message).subscribe() }
                 .doOnSuccess { commandManager.sendResponse(message.channel, "User kicked", member.mention + " has been kicked.").subscribe() }
                 .subscribe()

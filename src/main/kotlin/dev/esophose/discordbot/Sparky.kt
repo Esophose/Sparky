@@ -9,13 +9,17 @@ import dev.esophose.discordbot.manager.ListenerManager
 import dev.esophose.discordbot.manager.Manager
 import dev.esophose.discordbot.manager.PaginatedEmbedManager
 import dev.esophose.discordbot.utils.BotUtils
+import discord4j.core.DiscordClient
 import discord4j.core.DiscordClientBuilder
 import discord4j.core.GatewayDiscordClient
 import discord4j.core.`object`.entity.ApplicationInfo
 import discord4j.core.`object`.entity.User
 import discord4j.core.`object`.presence.Activity
 import discord4j.core.`object`.presence.Presence
+import discord4j.core.event.EventDispatcher
 import discord4j.core.event.domain.lifecycle.ReadyEvent
+import discord4j.gateway.intent.Intent
+import discord4j.gateway.intent.IntentSet
 import io.github.cdimascio.dotenv.Dotenv
 import reactor.core.scheduler.Schedulers
 import java.io.File
@@ -32,7 +36,8 @@ object Sparky {
     lateinit var connector: DatabaseConnector
     private val managers: MutableMap<KClass<out Manager>, Manager> = HashMap()
 
-    private fun start() {
+    @JvmStatic
+    fun main(args: Array<String>) {
         val dotenv = Dotenv.load()
         val token = dotenv["TOKEN"]
         if (token == null) {
@@ -40,18 +45,18 @@ object Sparky {
             exitProcess(1)
         }
 
-        this.discord = DiscordClientBuilder.create(token)
-                .build()
+        this.discord = DiscordClient.create(token)
                 .gateway()
                 .setInitialStatus { Presence.doNotDisturb(Activity.watching("the bot start up...")) }
+                .setEventDispatcher(EventDispatcher.buffering())
+                .setEnabledIntents(IntentSet.all())
                 .login()
-                .blockOptional()
-                .get()
+                .block()!!
 
-        this.self = this.discord.self.blockOptional().get()
-        this.botInfo = this.discord.applicationInfo.blockOptional().get()
+        this.discord.on(ReadyEvent::class.java).subscribe {
+            this.self = this.discord.self.blockOptional().get()
+            this.botInfo = this.discord.applicationInfo.blockOptional().get()
 
-        this.discord.eventDispatcher.on(ReadyEvent::class.java).subscribe {
             println("Started as ${this.self.username}#${this.self.discriminator}")
 
             // Display servers we are in
@@ -77,6 +82,8 @@ object Sparky {
         this.getManager(GuildSettingsManager::class)
         this.getManager(CommandManager::class)
         this.getManager(PaginatedEmbedManager::class)
+
+        this.discord.onDisconnect().block()
     }
 
     fun <M : Manager> getManager(managerClass: KClass<M>): M {
@@ -93,18 +100,6 @@ object Sparky {
             } catch (ex: ReflectiveOperationException) {
                 error("Failed to load manager for ${managerClass.simpleName}")
             }
-        }
-    }
-
-    @JvmStatic
-    fun main(args: Array<String>) {
-        start()
-
-        // Wait for program to be forcefully terminated
-        try {
-            Thread.currentThread().join()
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
         }
     }
 

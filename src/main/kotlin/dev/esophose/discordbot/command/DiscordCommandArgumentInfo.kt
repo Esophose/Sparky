@@ -4,7 +4,7 @@ import java.lang.reflect.Parameter
 import java.lang.reflect.ParameterizedType
 import java.util.Optional
 
-class DiscordCommandArgumentInfo(private val parameter: Parameter) {
+class DiscordCommandArgumentInfo(private val parameter: Parameter, val position: Int) {
 
     val type: Class<*>
         get() = if (this.isOptional) this.optionalType!! else this.parameter.type

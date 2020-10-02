@@ -22,6 +22,7 @@ import discord4j.rest.util.Permission
 import discord4j.rest.util.PermissionSet
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import reactor.util.function.Tuple2
 import reactor.util.function.Tuple3
 import reactor.util.function.Tuples
 import java.util.ArrayList
@@ -187,17 +188,17 @@ class CommandManager : Manager() {
                                             .subscribe { invalidArgs ->
                                                 if (invalidArgs.isEmpty()) {
                                                     Flux.fromIterable(combinedArguments)
-                                                            .flatMap { x -> x.t2.handle(guild, x.t3, x.t1.isOptional) }
+                                                            .flatMap { x -> x.t2.handle(guild, x.t3, x.t1.isOptional, x.t1.position) }
                                                             .collectList()
                                                             .subscribe { parsedArgs ->
                                                                 val commandMessage = DiscordCommandMessage(guild.id, channelId, messageId, member.id)
                                                                 val argumentBuilder = Stream.builder<Any>().add(commandMessage)
-                                                                for (parsedArg in parsedArgs)
-                                                                    argumentBuilder.add(parsedArg)
+                                                                for (parsedArg in parsedArgs.sortedWith(Comparator.comparingInt(Tuple2<Int, Any>::getT1)))
+                                                                    argumentBuilder.add(parsedArg.t2)
 
                                                                 try {
                                                                     command.executeMethod.invoke(command, *argumentBuilder.build().toArray())
-                                                                } catch (e: ReflectiveOperationException) {
+                                                                } catch (e: Exception) {
                                                                     e.printStackTrace()
                                                                 }
                                                             }
