@@ -29,8 +29,9 @@ class SudoCommand : DiscordCommand() {
         get() = Permission.ADMINISTRATOR
 
     fun execute(message: DiscordCommandMessage, member: Member, command: String) {
-        val commandManager = Sparky.getManager(CommandManager::class)
+        message.delete().subscribe()
 
+        val commandManager = Sparky.getManager(CommandManager::class)
         val commandPrefix = Sparky.getManager(GuildSettingsManager::class).getGuildSettings(message.guildId).commandPrefix
         member.avatar.flatMap { avatar ->
             message.channel.cast(TextChannel::class.java).flatMap { channel ->
