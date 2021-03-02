@@ -27,7 +27,7 @@ class SayCommand : DiscordCommand() {
         message.delete().subscribe()
         message.channel
                 .cast(GuildMessageChannel::class.java)
-                .flatMap { x -> x.createMessage(text) }
+                .flatMap { it.createMessage(text) }
                 .subscribe()
     }
 

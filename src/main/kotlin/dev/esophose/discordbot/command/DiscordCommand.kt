@@ -8,7 +8,6 @@ import discord4j.rest.util.PermissionSet
 import java.lang.reflect.Method
 import java.lang.reflect.Parameter
 import java.util.stream.Stream
-import kotlin.streams.toList
 
 /**
  * Ensure a `public void` method named `execute` with a first parameter of [DiscordCommandMessage] exists.

@@ -29,17 +29,21 @@ class NetworkPostCommand : DiscordCommand() {
         get() = Permission.ADMINISTRATOR
 
     fun execute(message: DiscordCommandMessage, url: String) {
-        val request = Request.Builder()
-                .url(url)
-                .method("POST", null)
-                .build()
-        val response = OkHttpClient().newBuilder().build().newCall(request).execute()
-        val responseCode = response.code
-        val responseMessage = response.message
-        if (response.isSuccessful) {
-            message.channel.cast(TextChannel::class.java).subscribe { BotUtils.sendLargeMessage("Success $responseCode: $responseMessage\n\n" + String(response.body!!.bytes()), it) }
-        } else {
-            Sparky.getManager(CommandManager::class).sendResponse(message.channel, "Error $responseCode: $responseMessage", "An error recurred executing the given POST request")
+        try {
+            val request = Request.Builder()
+                    .url(url)
+                    .method("POST", null)
+                    .build()
+            val response = OkHttpClient().newBuilder().build().newCall(request).execute()
+            val responseCode = response.code
+            val responseMessage = response.message
+            if (response.isSuccessful) {
+                message.channel.cast(TextChannel::class.java).subscribe { BotUtils.sendLargeMessage("Success $responseCode: $responseMessage\n\n" + String(response.body!!.bytes()), it) }
+            } else {
+                Sparky.getManager(CommandManager::class).sendResponse(message.channel, "Error $responseCode: $responseMessage", "An error recurred executing the given POST request").subscribe()
+            }
+        } catch (ex: Exception) {
+            Sparky.getManager(CommandManager::class).sendResponse(message.channel, "An error occurred during POST", "Message: ${ex.message}").subscribe()
         }
     }
 

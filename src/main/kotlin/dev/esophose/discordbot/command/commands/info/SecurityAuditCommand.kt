@@ -44,7 +44,7 @@ class SecurityAuditCommand : DiscordCommand() {
                 .flatMapMany { it.members }
                 .collectList()
                 .flatMap { members ->
-                    Flux.zip(Flux.fromIterable<Member>(members), Flux.fromIterable<Member>(members).flatMap { it.basePermissions })
+                    Flux.zip(Flux.fromIterable(members), Flux.fromIterable(members).flatMap { it.basePermissions })
                             .collectList()
                             .flatMap { tuple -> commandManager.sendResponse(message.channel, "Administrative users", this.getAdministrativeCountsString(tuple)) }
                 }.subscribe()
