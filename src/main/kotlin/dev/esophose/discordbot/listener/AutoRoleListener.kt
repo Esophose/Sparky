@@ -2,12 +2,15 @@ package dev.esophose.discordbot.listener
 
 import dev.esophose.discordbot.Sparky
 import dev.esophose.discordbot.manager.GuildSettingsManager
+import discord4j.common.util.Snowflake
+import discord4j.core.`object`.entity.Member
 import discord4j.core.event.domain.Event
 import discord4j.core.event.domain.guild.MemberJoinEvent
+import discord4j.core.event.domain.guild.MemberUpdateEvent
 import discord4j.core.event.domain.role.RoleDeleteEvent
 import reactor.core.publisher.Mono
 
-class AutoRoleListener : Listener<Event>(MemberJoinEvent::class, RoleDeleteEvent::class) {
+class AutoRoleListener : Listener<Event>(MemberJoinEvent::class, MemberUpdateEvent::class, RoleDeleteEvent::class) {
 
     private var guildSettingsManager: GuildSettingsManager? = null
 
@@ -17,17 +20,14 @@ class AutoRoleListener : Listener<Event>(MemberJoinEvent::class, RoleDeleteEvent
 
         when (event) {
             is MemberJoinEvent -> executeMemberJoin(event)
+            is MemberUpdateEvent -> executeMemberUpdate(event)
             is RoleDeleteEvent -> executeRoleDelete(event)
         }
     }
 
-    private fun executeMemberJoin(event: MemberJoinEvent) {
-        if (event.member.isBot)
-            return
-
-        val autoRoleIds = this.guildSettingsManager!!.getGuildSettings(event.guildId).autoRoleIds
+    private fun grantRole(guildId: Snowflake, member: Member) {
+        val autoRoleIds = this.guildSettingsManager!!.getGuildSettings(guildId).autoRoleIds
         if (autoRoleIds.isNotEmpty()) {
-            val member = event.member
             var mono: Mono<Void>? = null
             for (roleId in autoRoleIds) {
                 mono = if (mono == null) {
@@ -37,6 +37,21 @@ class AutoRoleListener : Listener<Event>(MemberJoinEvent::class, RoleDeleteEvent
                 }
             }
             mono?.subscribe()
+        }
+    }
+
+    private fun executeMemberJoin(event: MemberJoinEvent) {
+        if (!event.member.isBot && !event.member.isPending)
+            this.grantRole(event.guildId, event.member)
+    }
+
+    private fun executeMemberUpdate(event: MemberUpdateEvent) {
+        if (event.old.isEmpty || !event.old.get().isPending)
+            return
+
+        event.member.subscribe { member ->
+            if (!member.isPending)
+                this.grantRole(event.guildId, member)
         }
     }
 
