@@ -8,6 +8,7 @@ import discord4j.core.`object`.presence.Presence
 import discord4j.core.`object`.reaction.ReactionEmoji
 import discord4j.rest.util.Color
 import reactor.core.publisher.Mono
+import reactor.math.sum
 import java.io.IOException
 import java.io.InputStream
 import java.net.URL
@@ -23,7 +24,7 @@ object BotUtils {
     private val FORMATTER = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm:ss")
 
     val watchingUserCount: Mono<Long>
-        get() = Sparky.discord.users.filter { x -> !x.isBot }.distinct().count()
+        get() = Sparky.discord.guilds.map { it.memberCount }.sum()
 
     fun presenceAsString(presence: Presence): String {
         val optionalActivity = presence.activity
@@ -31,7 +32,8 @@ object BotUtils {
             return "Doing nothing"
 
         val activity = optionalActivity.get()
-        val output = when (activity.type) {
+
+        return when (activity.type) {
             Activity.Type.PLAYING -> "Playing ${activity.name}"
             Activity.Type.STREAMING -> "Streaming ${activity.name}"
             Activity.Type.LISTENING -> "Listening to ${activity.name}"
@@ -41,7 +43,7 @@ object BotUtils {
                 if (activity.emoji.isPresent) {
                     val customEmoji = activity.emoji.get().asCustomEmoji()
                     if (customEmoji.isPresent)
-                        emoji = this.emojiAsFormat(customEmoji.get()) + " "
+                        emoji = emojiAsFormat(customEmoji.get()) + " "
 
                     val unicodeEmoji = activity.emoji.get().asUnicodeEmoji()
                     if (unicodeEmoji.isPresent)
@@ -52,8 +54,6 @@ object BotUtils {
             }
             else -> "Doing nothing"
         }
-
-        return output
     }
 
     private fun emojiAsFormat(emoji: ReactionEmoji.Custom) : String {

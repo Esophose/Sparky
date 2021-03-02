@@ -61,7 +61,7 @@ object Sparky {
 
             // Display servers we are in
             this.discord.guilds
-                    .map { x -> x.name + " | " + x.id.asString() }
+                    .map { x -> "${x.name} | ID: ${x.id.asString()} | Members: ${x.memberCount}" }
                     .subscribe { println(it) }
 
             // Update presence
@@ -69,7 +69,7 @@ object Sparky {
                 BotUtils.watchingUserCount
                         .flatMap { amount -> this.discord.updatePresence(Presence.doNotDisturb(Activity.watching("$amount members | .help"))) }
                         .subscribe()
-            }, 5, 30, TimeUnit.SECONDS)
+            }, 1, 30, TimeUnit.SECONDS)
         }
 
         // Set up database
