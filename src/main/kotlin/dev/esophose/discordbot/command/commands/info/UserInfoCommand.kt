@@ -11,6 +11,7 @@ import discord4j.rest.util.Permission
 import discord4j.rest.util.PermissionSet
 import org.apache.commons.lang3.text.WordUtils
 import reactor.core.publisher.Mono
+import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.util.Comparator
@@ -51,7 +52,7 @@ class UserInfoCommand : DiscordCommand() {
                                 val info = "**Snowflake:** " + target.id.asString() + '\n' +
                                         "**Tag:** " + target.mention + '\n' +
                                         "**Discord Join Time:** " + BotUtils.snowflakeAsDateTimeString(target.id) + '\n' +
-                                        "**Guild Join Time:** " + BotUtils.formatDateTime(LocalDateTime.ofInstant(target.joinTime, ZoneOffset.UTC)) + '\n' +
+                                        "**Guild Join Time:** " + BotUtils.formatDateTime(LocalDateTime.ofInstant(target.joinTime.orElse(Instant.now()), ZoneOffset.UTC)) + '\n' +
                                         "**Main Role:** " + (if (tuple.t1.isEveryone) "@everyone" else tuple.t1.mention) + '\n' +
                                         "**Color:** " + BotUtils.toHexString(tuple.t2) + '\n' +
                                         "**Displayname:** " + target.displayName + '\n' +

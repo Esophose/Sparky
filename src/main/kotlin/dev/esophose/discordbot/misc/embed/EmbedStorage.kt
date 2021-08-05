@@ -1,6 +1,7 @@
 package dev.esophose.discordbot.misc.embed
 
 import discord4j.core.spec.EmbedCreateSpec
+import discord4j.core.spec.legacy.LegacyEmbedCreateSpec
 import discord4j.rest.util.Color
 import java.time.Instant
 import java.util.ArrayList
@@ -29,7 +30,7 @@ class EmbedStorage {
     fun setAuthor(name: String, url: String?, iconUrl: String?): EmbedStorage = apply { this.author = EmbedAuthor(name, url, iconUrl) }
     fun addField(name: String, value: String, inline: Boolean): EmbedStorage = apply { this.fields.add(EmbedField(name, value, inline)) }
 
-    fun applyToCreateSpec(embedCreateSpec: EmbedCreateSpec, currentPageNumber: Int, maxPageNumber: Int) {
+    fun applyToCreateSpec(embedCreateSpec: LegacyEmbedCreateSpec, currentPageNumber: Int, maxPageNumber: Int) {
         if (this.title != null) embedCreateSpec.setTitle(this.applyPageReplacements(this.title!!, currentPageNumber, maxPageNumber))
         if (this.description != null) embedCreateSpec.setDescription(this.applyPageReplacements(this.description!!, currentPageNumber, maxPageNumber))
         if (this.url != null) embedCreateSpec.setUrl(this.url!!)

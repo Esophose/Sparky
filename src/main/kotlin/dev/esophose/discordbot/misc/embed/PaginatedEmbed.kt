@@ -6,6 +6,7 @@ import discord4j.core.`object`.entity.Message
 import discord4j.core.`object`.entity.channel.TextChannel
 import discord4j.core.`object`.reaction.ReactionEmoji
 import discord4j.core.spec.EmbedCreateSpec
+import discord4j.core.spec.legacy.LegacyEmbedCreateSpec
 import reactor.core.publisher.Mono
 import java.util.ArrayList
 
@@ -154,7 +155,7 @@ class PaginatedEmbed(val creatorId: Snowflake) {
         return addReactionsMono
     }
 
-    private fun applyEmbedCreateSpec(embedCreateSpec: EmbedCreateSpec) {
+    private fun applyEmbedCreateSpec(embedCreateSpec: LegacyEmbedCreateSpec) {
         if (this.embeds.isEmpty())
             throw IllegalStateException("Must have at least one embed added")
 

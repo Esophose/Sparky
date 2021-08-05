@@ -74,6 +74,10 @@ class DatabaseCommand : DiscordCommand(true) {
         for (i in 0 until columnCount)
             rowValues.add(mutableListOf(rsmd.getColumnName(i + 1)))
 
+        // If a single value, print out the entire thing
+        if (rowValues.size == 1 && columnCount == 1)
+            return listOf(result.getString(1))
+
         // Add data values
         while (result.next()) {
             for (i in 0 until columnCount) {
@@ -86,7 +90,7 @@ class DatabaseCommand : DiscordCommand(true) {
         }
 
         if (rowCount == 0)
-            return mutableListOf("\nNo rows were found matching your query")
+            return listOf("\nNo rows were found matching your query")
 
         // Create a list of max column length strings for padding
         val columnLengthPaddings = mutableListOf<String>()

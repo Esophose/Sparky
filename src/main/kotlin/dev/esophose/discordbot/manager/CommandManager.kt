@@ -17,6 +17,7 @@ import discord4j.core.`object`.entity.channel.TextChannel
 import discord4j.core.`object`.reaction.ReactionEmoji
 import discord4j.core.event.domain.message.MessageCreateEvent
 import discord4j.core.spec.EmbedCreateSpec
+import discord4j.core.spec.legacy.LegacyEmbedCreateSpec
 import discord4j.rest.util.Color
 import discord4j.rest.util.Permission
 import discord4j.rest.util.PermissionSet
@@ -254,7 +255,7 @@ class CommandManager : Manager() {
                 .flatMap { channel -> channel.createEmbed { spec -> this.applyEmbedSpec(channel.guildId, spec, title, response, thumbnailUrl) } }
     }
 
-    fun applyEmbedSpec(guildId: Snowflake, spec: EmbedCreateSpec, title: String?, response: String, thumbnailUrl: String?): EmbedCreateSpec {
+    fun applyEmbedSpec(guildId: Snowflake, spec: LegacyEmbedCreateSpec, title: String?, response: String, thumbnailUrl: String?): LegacyEmbedCreateSpec {
         if (title != null)
             spec.setTitle(title)
 

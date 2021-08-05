@@ -10,20 +10,17 @@ import dev.esophose.discordbot.manager.Manager
 import dev.esophose.discordbot.manager.PaginatedEmbedManager
 import dev.esophose.discordbot.utils.BotUtils
 import discord4j.core.DiscordClient
-import discord4j.core.DiscordClientBuilder
 import discord4j.core.GatewayDiscordClient
 import discord4j.core.`object`.entity.ApplicationInfo
 import discord4j.core.`object`.entity.User
-import discord4j.core.`object`.presence.Activity
-import discord4j.core.`object`.presence.Presence
+import discord4j.core.`object`.presence.ClientActivity
+import discord4j.core.`object`.presence.ClientPresence
 import discord4j.core.event.EventDispatcher
 import discord4j.core.event.domain.lifecycle.ReadyEvent
-import discord4j.gateway.intent.Intent
 import discord4j.gateway.intent.IntentSet
 import io.github.cdimascio.dotenv.Dotenv
 import reactor.core.scheduler.Schedulers
 import java.io.File
-import java.util.HashMap
 import java.util.concurrent.TimeUnit
 import kotlin.reflect.KClass
 import kotlin.system.exitProcess
@@ -47,7 +44,7 @@ object Sparky {
 
         this.discord = DiscordClient.create(token)
                 .gateway()
-                .setInitialStatus { Presence.doNotDisturb(Activity.watching("the bot start up...")) }
+                .setInitialPresence { ClientPresence.doNotDisturb(ClientActivity.watching("the bot start up...")) }
                 .setEventDispatcher(EventDispatcher.buffering())
                 .setEnabledIntents(IntentSet.all())
                 .login()
@@ -67,7 +64,7 @@ object Sparky {
             // Update presence
             Schedulers.parallel().schedulePeriodically({
                 BotUtils.watchingUserCount
-                        .flatMap { amount -> this.discord.updatePresence(Presence.doNotDisturb(Activity.watching("$amount members | .help"))) }
+                        .flatMap { amount -> this.discord.updatePresence(ClientPresence.doNotDisturb(ClientActivity.watching("$amount members | .help"))) }
                         .subscribe()
             }, 1, 30, TimeUnit.SECONDS)
         }

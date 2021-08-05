@@ -10,7 +10,7 @@ import dev.esophose.discordbot.database.migrations._3_Create_Table_EmbedColor
 import dev.esophose.discordbot.database.migrations._4_Create_Table_AutoRole
 import dev.esophose.discordbot.database.migrations._5_Create_Table_MessageAudit
 import java.util.Comparator
-import kotlin.streams.toList
+import java.util.stream.Collectors
 
 class DataMigrationManager : Manager() {
 
@@ -68,7 +68,7 @@ class DataMigrationManager : Manager() {
                     .stream()
                     .filter { x -> x.revision > finalCurrentMigration }
                     .sorted(Comparator.comparingInt { it.revision })
-                    .toList()
+                    .collect(Collectors.toList())
 
             if (requiredMigrations.isNotEmpty()) {
                 // Migrate the data

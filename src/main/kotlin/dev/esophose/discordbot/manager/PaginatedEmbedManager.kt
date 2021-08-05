@@ -14,7 +14,6 @@ class PaginatedEmbedManager : Manager() {
     private val activeEmbeds: MutableMap<Snowflake, PaginatedEmbed>
 
     init {
-
         this.activeEmbeds = HashMap()
     }
 
