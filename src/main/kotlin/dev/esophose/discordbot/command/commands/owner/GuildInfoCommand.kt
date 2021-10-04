@@ -55,20 +55,22 @@ class GuildInfoCommand : DiscordCommand(true) {
                                 iconUrl = target.getIconUrl(Image.Format.PNG).orElse(null)
                             }
 
-                            val info = "**Snowflake:** " + target.id.asString() + '\n' +
-                                    "**Owner:** " + owner.mention + '\n' +
-                                    "**Guild Creation Time:** " + BotUtils.formatDateTime(LocalDateTime.ofInstant(target.joinTime, ZoneOffset.UTC)) + '\n' +
-                                    "**Member Count**: " + target.memberCount + '\n' +
-                                    "**Role Count:** " + target.roleIds.size + '\n' +
-                                    "**Emote Count:** " + target.emojiIds.size + '\n' +
-                                    "**Channel Count:** " + channelCount + '\n' +
-                                    "**Nitro Boosts:** " + target.premiumSubscriptionCount.orElse(0) + '\n' +
-                                    "**Boost Tier:** " + WordUtils.capitalizeFully(target.premiumTier.name.replace('_', ' ')) + '\n' +
-                                    "**Verification Level:** " + WordUtils.capitalizeFully(target.verificationLevel.name.replace('_', ' ')) + '\n' +
-                                    "**Content Filter Level:** " + WordUtils.capitalizeFully(target.contentFilterLevel.name.replace('_', ' ')) + '\n' +
-                                    "**Notification Level:** " + WordUtils.capitalizeFully(target.notificationLevel.name.replace('_', ' ')) + '\n' +
-                                    "**MFA Level:** " + WordUtils.capitalizeFully(target.mfaLevel.name.replace('_', ' '))
-                            commandManager.sendResponse(message.channel, "Info for " + target.name, info, iconUrl)
+                            target.requestMembers().count().flatMap { memberCount ->
+                                val info = "**Snowflake:** " + target.id.asString() + '\n' +
+                                        "**Owner:** " + owner.mention + '\n' +
+                                        "**Guild Creation Time:** " + BotUtils.formatDateTime(LocalDateTime.ofInstant(target.joinTime, ZoneOffset.UTC)) + '\n' +
+                                        "**Member Count**: " + memberCount + '\n' +
+                                        "**Role Count:** " + target.roleIds.size + '\n' +
+                                        "**Emote Count:** " + target.emojiIds.size + '\n' +
+                                        "**Channel Count:** " + channelCount + '\n' +
+                                        "**Nitro Boosts:** " + target.premiumSubscriptionCount.orElse(0) + '\n' +
+                                        "**Boost Tier:** " + WordUtils.capitalizeFully(target.premiumTier.name.replace('_', ' ')) + '\n' +
+                                        "**Verification Level:** " + WordUtils.capitalizeFully(target.verificationLevel.name.replace('_', ' ')) + '\n' +
+                                        "**Content Filter Level:** " + WordUtils.capitalizeFully(target.contentFilterLevel.name.replace('_', ' ')) + '\n' +
+                                        "**Notification Level:** " + WordUtils.capitalizeFully(target.notificationLevel.name.replace('_', ' ')) + '\n' +
+                                        "**MFA Level:** " + WordUtils.capitalizeFully(target.mfaLevel.name.replace('_', ' '))
+                                commandManager.sendResponse(message.channel, "Info for " + target.name, info, iconUrl)
+                            }
                         }
                     }
                 }.subscribe()

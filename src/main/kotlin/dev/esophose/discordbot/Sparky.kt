@@ -19,6 +19,7 @@ import discord4j.core.event.EventDispatcher
 import discord4j.core.event.domain.lifecycle.ReadyEvent
 import discord4j.gateway.intent.IntentSet
 import io.github.cdimascio.dotenv.Dotenv
+import reactor.core.publisher.Mono
 import reactor.core.scheduler.Schedulers
 import java.io.File
 import java.util.concurrent.TimeUnit
@@ -58,8 +59,9 @@ object Sparky {
 
             // Display servers we are in
             this.discord.guilds
-                    .map { x -> "${x.name} | ID: ${x.id.asString()} | Members: ${x.memberCount}" }
-                    .subscribe { println(it) }
+                .flatMap { Mono.zip(Mono.just(it), it.requestMembers().count()) }
+                .map { x -> "${x.t1.name} | ID: ${x.t1.id.asString()} | Members: ${x.t2}" }
+                .subscribe { println(it) }
 
             // Update presence
             Schedulers.parallel().schedulePeriodically({

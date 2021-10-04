@@ -6,6 +6,8 @@ import dev.esophose.discordbot.command.DiscordCommandMessage
 import dev.esophose.discordbot.manager.CommandManager
 import discord4j.rest.util.Permission
 import discord4j.rest.util.PermissionSet
+import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 
 class GuildsCommand : DiscordCommand(true) {
 
@@ -31,9 +33,11 @@ class GuildsCommand : DiscordCommand(true) {
             if (guilds.isEmpty()) {
                 commandManager.sendResponse(message.channel, "No guilds were found", "What the heck?")
             } else {
-                val stringBuilder = StringBuilder()
-                guilds.sortedByDescending { it.memberCount }.forEach { stringBuilder.append(it.name).append(" | ").append(it.memberCount).append((if (it.memberCount == 1) " Member" else " Members") + " | ").append(it.id.asString()).append('\n') }
-                commandManager.sendResponse(message.channel, guilds.size.toString() + " " + (if (guilds.size > 1) "Guilds" else "Guild"), stringBuilder.toString())
+                Flux.fromIterable(guilds).flatMap { Mono.zip(Mono.just(it), it.requestMembers().count()) }.collectList().flatMap {
+                    val stringBuilder = StringBuilder()
+                    it.sortedByDescending { x -> x.t2 }.forEach { x -> stringBuilder.append(x.t1.name).append(" | ").append(x.t2).append((if (x.t2 == 1L) " Member" else " Members") + " | ").append(x.t1.id.asString()).append('\n') }
+                    commandManager.sendResponse(message.channel, guilds.size.toString() + " " + (if (guilds.size > 1) "Guilds" else "Guild"), stringBuilder.toString())
+                }
             }
         }.subscribe()
     }

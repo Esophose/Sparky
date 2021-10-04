@@ -24,7 +24,7 @@ object BotUtils {
     private val FORMATTER = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm:ss")
 
     val watchingUserCount: Mono<Long>
-        get() = Sparky.discord.guilds.map { it.memberCount }.sum()
+        get() = Sparky.discord.guilds.flatMap { it.requestMembers() }.count()
 
     fun presenceAsString(presence: Presence): String {
         val optionalActivity = presence.activity
@@ -38,6 +38,7 @@ object BotUtils {
             Activity.Type.STREAMING -> "Streaming ${activity.name}"
             Activity.Type.LISTENING -> "Listening to ${activity.name}"
             Activity.Type.WATCHING -> "Watching ${activity.name}"
+            Activity.Type.COMPETING -> "Competing in ${activity.name}"
             Activity.Type.CUSTOM -> {
                 var emoji = ""
                 if (activity.emoji.isPresent) {
