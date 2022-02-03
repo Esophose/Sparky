@@ -8,7 +8,6 @@ import discord4j.core.`object`.presence.Presence
 import discord4j.core.`object`.reaction.ReactionEmoji
 import discord4j.rest.util.Color
 import reactor.core.publisher.Mono
-import reactor.math.sum
 import java.io.IOException
 import java.io.InputStream
 import java.net.URL
@@ -23,8 +22,7 @@ object BotUtils {
 
     private val FORMATTER = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm:ss")
 
-    val watchingUserCount: Mono<Long>
-        get() = Sparky.discord.guilds.flatMap { it.requestMembers() }.count()
+    fun getWatchingUserCount(): Mono<Long> = Sparky.discord.guilds.flatMap { it.requestMembers() }.count()
 
     fun presenceAsString(presence: Presence): String {
         val optionalActivity = presence.activity

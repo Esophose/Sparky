@@ -27,7 +27,7 @@ class InfoCommand : DiscordCommand() {
         get() = Permission.SEND_MESSAGES
 
     fun execute(message: DiscordCommandMessage) {
-        Mono.zip(Sparky.discord.guilds.count(), BotUtils.watchingUserCount).subscribe { tuple ->
+        Mono.zip(Sparky.discord.guilds.count(), BotUtils.getWatchingUserCount()).subscribe { tuple ->
             val self = Sparky.self
             val guildCount = tuple.t1
             val userCount = tuple.t2
@@ -35,7 +35,7 @@ class InfoCommand : DiscordCommand() {
             val prefix = guildSettings.commandPrefix
 
             val info = """Hi, my name is ${self.username}!
-                          I'm a utility bot written in Kotlin with Discord4J `master-SNAPSHOT`.
+                          I'm a utility bot written in Kotlin with Discord4J `3.2.1`.
                           Currently, I'm watching over $guildCount guilds with a total of $userCount members.
                           My prefix for this guild is `$prefix`
                           If you'd like to know more about what I can do, try out my `${prefix}help` command.""".trimIndent()

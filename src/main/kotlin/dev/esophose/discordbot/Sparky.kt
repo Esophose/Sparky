@@ -65,10 +65,10 @@ object Sparky {
 
             // Update presence
             Schedulers.parallel().schedulePeriodically({
-                BotUtils.watchingUserCount
+                BotUtils.getWatchingUserCount()
                         .flatMap { amount -> this.discord.updatePresence(ClientPresence.doNotDisturb(ClientActivity.watching("$amount members | .help"))) }
                         .subscribe()
-            }, 1, 30, TimeUnit.SECONDS)
+            }, 1, 10, TimeUnit.MINUTES)
         }
 
         // Set up database

@@ -25,7 +25,7 @@ class DatabaseCommand : DiscordCommand(true) {
         get() = PermissionSet.of(Permission.SEND_MESSAGES)
 
     override val defaultRequiredMemberPermission: Permission
-        get() = Permission.ADMINISTRATOR
+        get() = Permission.SEND_MESSAGES
 
     fun execute(message: DiscordCommandMessage, query: String) {
         val commandManager = Sparky.getManager(CommandManager::class)

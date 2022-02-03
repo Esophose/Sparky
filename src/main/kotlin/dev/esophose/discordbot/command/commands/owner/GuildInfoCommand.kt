@@ -32,7 +32,7 @@ class GuildInfoCommand : DiscordCommand(true) {
         get() = PermissionSet.of(Permission.SEND_MESSAGES)
 
     override val defaultRequiredMemberPermission: Permission
-        get() = Permission.ADMINISTRATOR
+        get() = Permission.SEND_MESSAGES
 
     fun execute(message: DiscordCommandMessage, guild: Optional<Guild>) {
         val commandManager = Sparky.getManager(CommandManager::class)
@@ -58,7 +58,7 @@ class GuildInfoCommand : DiscordCommand(true) {
                             target.requestMembers().count().flatMap { memberCount ->
                                 val info = "**Snowflake:** " + target.id.asString() + '\n' +
                                         "**Owner:** " + owner.mention + '\n' +
-                                        "**Guild Creation Time:** " + BotUtils.formatDateTime(LocalDateTime.ofInstant(target.joinTime, ZoneOffset.UTC)) + '\n' +
+                                        "**Guild Creation Time:** " + BotUtils.snowflakeAsDateTimeString(target.id) + '\n' +
                                         "**Member Count**: " + memberCount + '\n' +
                                         "**Role Count:** " + target.roleIds.size + '\n' +
                                         "**Emote Count:** " + target.emojiIds.size + '\n' +

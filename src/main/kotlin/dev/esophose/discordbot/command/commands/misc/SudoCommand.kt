@@ -46,7 +46,7 @@ class SudoCommand : DiscordCommand() {
             }
         }.thenEmpty(Mono.fromRunnable {
             if (command.startsWith(commandPrefix))
-                commandManager.executeCommand(message.guild, message.channel, message.channelId, message.messageId, member, command, commandPrefix)
+                commandManager.executeCommand(message.guild, message.channel, message.channelId, message.messageId, member, command, commandPrefix, message.authorId)
         }).subscribe()
     }
 

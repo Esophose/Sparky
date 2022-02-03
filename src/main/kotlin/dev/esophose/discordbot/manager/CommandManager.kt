@@ -115,15 +115,15 @@ class CommandManager : Manager() {
             // Force bot mentions that are at the beginning of a message to trigger the info command
             event.guild.flatMap { x -> x.getMemberById(Sparky.self.id) }.subscribe {
                 if (content.startsWith(it.mention) || content.startsWith(it.nicknameMention))
-                    this.executeCommand(event.guild, event.message.channel, event.message.channelId, event.message.id, member, commandPrefix + "info", commandPrefix)
+                    this.executeCommand(event.guild, event.message.channel, event.message.channelId, event.message.id, member, commandPrefix + "info", commandPrefix, null)
             }
             return
         }
 
-        this.executeCommand(event.guild, event.message.channel, event.message.channelId, event.message.id, member, content, commandPrefix)
+        this.executeCommand(event.guild, event.message.channel, event.message.channelId, event.message.id, member, content, commandPrefix, null)
     }
 
-    fun executeCommand(guildMono: Mono<Guild>, channelMono: Mono<MessageChannel>, channelId: Snowflake, messageId: Snowflake, member: Member, content: String, commandPrefix: String?) {
+    fun executeCommand(guildMono: Mono<Guild>, channelMono: Mono<MessageChannel>, channelId: Snowflake, messageId: Snowflake, member: Member, content: String, commandPrefix: String?, sudoMember: Snowflake?) {
         try {
             val matcher = COMMAND_PATTERN.matcher(content.substring(commandPrefix!!.length))
             val pieces = ArrayList<String>()
@@ -146,7 +146,7 @@ class CommandManager : Manager() {
                             if (permissions.t2.contains(Permission.ADMINISTRATOR))
                                 missingBotPermissions = PermissionSet.none()
 
-                            if (!(command.botOwnerOnly && Sparky.botInfo.ownerId == member.id) && (!hasMemberPermission || !missingBotPermissions.isEmpty() || command.botOwnerOnly)) {
+                            if (!(command.botOwnerOnly && Sparky.botInfo.ownerId == member.id && sudoMember == null) && (!hasMemberPermission || !missingBotPermissions.isEmpty() || command.botOwnerOnly)) {
                                 if (command.botOwnerOnly) {
                                     Sparky.botInfo.owner.flatMap { this.sendResponse(channelMono, "Owner only", "This command may only be run by ${it.username}#${it.discriminator}") }.subscribe()
                                 } else {
