@@ -59,7 +59,7 @@ class UserInfoCommand : DiscordCommand() {
                                         "**Status:** " + WordUtils.capitalize(tuple.t3.status.value) + '\n' +
                                         "**Presence:** " + BotUtils.presenceAsString(tuple.t3) + '\n' +
                                         "**Roles:** " + roles
-                                commandManager.sendResponse(message.channel, "Info for " + target.username + '#' + target.discriminator + botTag, info, target.avatarUrl).subscribe()
+                                commandManager.sendResponse(message.channel, "Info for " + target.username + '#' + target.discriminator + botTag, info, target.effectiveAvatarUrl).subscribe()
                             }
                 }
     }
